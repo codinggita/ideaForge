@@ -3,7 +3,7 @@
 ## 📌 Context
 This repository contains the completely decoupled front-end architecture for **IdeaForge**. The environment is built from the ground up as a pure Vanilla **React + Vite** implementation, laying the dedicated client-side groundwork for our **MERN Stack** (MongoDB, Express, React, Node.js) architecture.
 
-This Pull Request represents **Phase 1** of our front-end initialization, strictly establishing the `Landing Page` foundation internally built with multiple specialized components, and utilizing a centralized data structure (`utils.js`) to mock database behavior until the Node/Express backend is wired up.
+This Pull Request represents **Phase 1** of our front-end initialization, strictly establishing the `Landing Page` foundation and the `Login` UI flows visually, utilizing a centralized data structure (`utils.js`) and UI timeout mockups to simulate behavior until the Node/Express backend is wired up.
 
 ## 🏗️ Architecture & Philosophy
 
@@ -21,6 +21,8 @@ The primary objective of this architecture is velocity and clean decoupling. Bui
 ```text
 ├── src/
 │   ├── components/
+│   │   ├── auth/ 
+│   │   │   └── SwapForm.jsx          // Authentication logic UI
 │   │   └── landing/          // Modular Landing components
 │   │       ├── CoreFlow.jsx
 │   │       ├── Footer.jsx
@@ -31,7 +33,8 @@ The primary objective of this architecture is velocity and clean decoupling. Bui
 │   │       ├── SuiteGrid.jsx
 │   │       └── Testimonials.jsx
 │   ├── pages/
-│   │   └── Landing.jsx       // Parent Page mapping and orchestrating components
+│   │   ├── Landing.jsx       // Parent Page mapping and orchestrating components
+│   │   └── Login.jsx         // UI parent orchestrating SwapForm layout
 │   ├── utils.js              // Centralized Dictionary / Content Data Configs
 │   ├── App.jsx               // Core React Router Configuration
 │   ├── main.jsx              // Application DOM Root Injection
@@ -53,7 +56,7 @@ When reviewing this PR, please pay attention to the following architectural mile
 1. **Clean JSX Environment**: Verify the clean layout of standard React `.jsx` syntax and modern hooks.
 2. **Design Fidelity**: Examine `Landing.jsx`. The design specifications (glassmorphism boundaries, blur, shadows) have been built purely through Tailwind utility classes.
 3. **Data Injection Model**: Observe how `kpiMetrics`, `productSuiteFeatures`, and `testimonialsData` are seamlessly imported and dynamically mapped from `utils.js`. This is the exact pattern we will use when mapping API payloads from our Express backend later.
-4. *(Note: The `Login` module logic is currently stashed locally. It will be pushed in an immediate subsequent PR to maintain atomic, easy-to-review feature commits).*
+4. **Mocked Authenticaton (No JWT Yet)**: The `Login` component features a fully built visual UI with timers wrapping the button states (`SwapForm.jsx`). No JWT or true auth is active yet. We will hook a Node/Express backend to this visual shell in a future iteration.
 
 ## 🚀 Setup & Local Execution
 
