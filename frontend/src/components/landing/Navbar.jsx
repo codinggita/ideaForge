@@ -1,6 +1,17 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Lightbulb, Search, Bell, Settings, Menu, X } from 'lucide-react';
+
+/**
+ * scrollToSection - Smooth-scrolls to a DOM element by its ID.
+ * Used instead of raw <a href="#id"> to avoid full-page reloads in React SPA.
+ */
+const scrollToSection = (sectionId) => {
+  const element = document.getElementById(sectionId);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+};
 
 export default function Navbar({ user, loading }) {
   const navigate = useNavigate();
@@ -10,6 +21,12 @@ export default function Navbar({ user, loading }) {
   const goToRoleAwareRoute = (signedInHref) => {
     navigate(user ? signedInHref : '/login');
   };
+
+  // Scroll + close mobile menu in one action
+  const handleNavClick = useCallback((sectionId) => {
+    scrollToSection(sectionId);
+    setMobileMenuOpen(false);
+  }, []);
 
   return (
     <>
@@ -26,21 +43,21 @@ export default function Navbar({ user, loading }) {
               </div>
             </div>
 
-            {/* Desktop Links */}
+            {/* Desktop Navigation Links */}
             <div className="hidden items-center gap-5 md:flex">
-              <a href="#top" className="border-b-2 border-[#26466f] pb-1 text-sm font-semibold text-[#26466f]">
+              <button onClick={() => scrollToSection('top')} className="border-b-2 border-[#26466f] pb-1 text-sm font-semibold text-[#26466f]">
                 Home
-              </a>
-              <a href="#how-it-works" className="text-sm text-[#667085] transition hover:text-[#243041]">
+              </button>
+              <button onClick={() => scrollToSection('how-it-works')} className="text-sm text-[#667085] transition hover:text-[#243041]">
                 Modules
-              </a>
-              <a href="#suite" className="text-sm text-[#667085] transition hover:text-[#243041]">
+              </button>
+              <button onClick={() => scrollToSection('suite')} className="text-sm text-[#667085] transition hover:text-[#243041]">
                 Suite
-              </a>
+              </button>
               {!user && (
-                <a href="#pricing" className="text-sm text-[#667085] transition hover:text-[#243041]">
+                <button onClick={() => scrollToSection('pricing')} className="text-sm text-[#667085] transition hover:text-[#243041]">
                   Pricing
-                </a>
+                </button>
               )}
             </div>
           </div>
@@ -89,10 +106,10 @@ export default function Navbar({ user, loading }) {
       {mobileMenuOpen && (
         <div className="relative z-50 border-b border-[#243041]/6 bg-[#f8f6f1] px-6 py-4 md:hidden">
           <div className="space-y-3 rounded-[1.5rem] border border-[#243041]/6 bg-white/80 p-4 shadow-[0_18px_40px_rgba(36,48,65,0.06)]">
-            <a href="#top" className="block text-sm font-medium text-[#667085]">Home</a>
-            <a href="#how-it-works" className="block text-sm font-medium text-[#667085]">Modules</a>
-            <a href="#suite" className="block text-sm font-medium text-[#667085]">Suite</a>
-            {!user && <a href="#pricing" className="block text-sm font-medium text-[#667085]">Pricing</a>}
+            <button onClick={() => handleNavClick('top')} className="block text-sm font-medium text-[#667085]">Home</button>
+            <button onClick={() => handleNavClick('how-it-works')} className="block text-sm font-medium text-[#667085]">Modules</button>
+            <button onClick={() => handleNavClick('suite')} className="block text-sm font-medium text-[#667085]">Suite</button>
+            {!user && <button onClick={() => handleNavClick('pricing')} className="block text-sm font-medium text-[#667085]">Pricing</button>}
           </div>
           <Link
             to={launchHref}

@@ -1,6 +1,17 @@
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 
+/**
+ * scrollToSection - Smooth-scrolls to a DOM element by its ID.
+ * Used instead of raw <a href="#id"> to avoid full-page reloads in React SPA.
+ */
+const scrollToSection = (sectionId) => {
+  const element = document.getElementById(sectionId);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+};
+
 export default function Footer({ user }) {
   const launchHref = user ? '/dashboard' : '/login';
 
@@ -36,10 +47,10 @@ export default function Footer({ user }) {
             <div>
               <p className="font-semibold text-[#243041]">Product</p>
               <div className="mt-4 space-y-3 text-[#667085]">
-                <a href="#how-it-works" className="block transition hover:text-[#243041]">Modules</a>
-                <a href="#suite" className="block transition hover:text-[#243041]">Suite</a>
+                <button onClick={() => scrollToSection('how-it-works')} className="block transition hover:text-[#243041]">Modules</button>
+                <button onClick={() => scrollToSection('suite')} className="block transition hover:text-[#243041]">Suite</button>
                 {!user ? (
-                  <a href="#pricing" className="block transition hover:text-[#243041]">Pricing</a>
+                  <button onClick={() => scrollToSection('pricing')} className="block transition hover:text-[#243041]">Pricing</button>
                 ) : (
                   <Link to="/dashboard" className="block transition hover:text-[#243041]">Dashboard</Link>
                 )}
@@ -48,7 +59,7 @@ export default function Footer({ user }) {
             <div>
               <p className="font-semibold text-[#243041]">Company</p>
               <div className="mt-4 space-y-3 text-[#667085]">
-                <a href="#features" className="block transition hover:text-[#243041]">About</a>
+                <button onClick={() => scrollToSection('features')} className="block transition hover:text-[#243041]">About</button>
                 <Link to="/privacy" className="block transition hover:text-[#243041]">Privacy</Link>
                 <Link to="/terms" className="block transition hover:text-[#243041]">Terms</Link>
               </div>
