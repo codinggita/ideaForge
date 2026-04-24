@@ -16,25 +16,48 @@ The primary objective of this architecture is velocity and clean decoupling. The
 - **Animations**: `framer-motion` (Motion/React physics)
 - **Types**: Vanilla JS / `.jsx`. We've strictly kept the stack lean with lightweight standard JavaScript components.
 
+### 🛑 Routing Rules (For Senior Developers)
+**CRITICAL:** Under no circumstances should native HTML anchor tags (`<a href="...">`) be used for internal app navigation. Our application relies entirely on client-side routing to maintain state and provide a seamless, SPA experience.
+- Always use `react-router-dom`'s `<Link to="...">` component for declarative navigation.
+- Use the `useNavigate()` hook for programmatic navigation (e.g., after form submissions).
+- This ensures we avoid full page reloads and maintain the lightning-fast performance of Vite.
+
 ## 📂 Project Structure Overview
 
 ```text
 ideaForge/
 ├── frontend/                     // React + Vite SPA Client
 │   ├── src/
-│   │   ├── components/
-│   │   │   ├── auth/
-│   │   │   │   └── SwapForm.jsx          // Sign-in / Sign-up toggle form
-│   │   │   └── landing/                  // Modular Landing page components
-│   │   │       ├── CoreFlow.jsx
-│   │   │       ├── Footer.jsx
-│   │   │       ├── HeroSection.jsx
-│   │   │       ├── ModulesSection.jsx
-│   │   │       ├── Navbar.jsx
-│   │   │       ├── PricingSection.jsx
-│   │   │       ├── SuiteGrid.jsx
-│   │   │       └── Testimonials.jsx
+│   │   ├── components/                   // Domain-specific UI blocks
+│   │   │   ├── auth/                     // Login & Signup components
+│   │   │   │   ├── AuthLayout.jsx
+│   │   │   │   ├── EmailForm.jsx
+│   │   │   │   ├── GoogleAuthButton.jsx
+│   │   │   │   ├── ModeToggle.jsx
+│   │   │   │   └── SwapForm.jsx
+│   │   │   ├── dashboard/                // Dashboard widgets & layout
+│   │   │   │   ├── AIBriefing.jsx
+│   │   │   │   ├── DashboardLayout.jsx
+│   │   │   │   ├── Greeting.jsx
+│   │   │   │   ├── MobileNav.jsx
+│   │   │   │   ├── RecentEmails.jsx
+│   │   │   │   ├── RecentEvaluations.jsx
+│   │   │   │   ├── Sidebar.jsx
+│   │   │   │   ├── StatsOverview.jsx
+│   │   │   │   ├── TodaysTasks.jsx
+│   │   │   │   ├── Topbar.jsx
+│   │   │   │   └── UpcomingMeetings.jsx
+│   │   │   ├── landing/                  // Landing page components
+│   │   │   │   ├── CoreFlow.jsx
+│   │   │   │   ├── Footer.jsx
+│   │   │   │   ├── HeroSection.jsx
+│   │   │   │   ├── ModulesSection.jsx
+│   │   │   │   ├── Navbar.jsx
+│   │   │   │   ├── PricingSection.jsx
+│   │   │   │   ├── SuiteGrid.jsx
+│   │   │   │   └── Testimonials.jsx
 │   │   ├── pages/
+│   │   │   ├── Dashboard.jsx             // Parent orchestrator for Dashboard components
 │   │   │   ├── Landing.jsx               // Parent orchestrator for Landing components
 │   │   │   └── Login.jsx                 // Parent orchestrator for Auth SwapForm
 │   │   ├── utils.js                      // Centralized static data / content configs
