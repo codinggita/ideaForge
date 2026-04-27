@@ -76,12 +76,23 @@ ideaForge/
 │   ├── tailwind.config.js
 │   └── postcss.config.js
 │
-├── backend/                      // Node.js + Express API (Phase 2)
+├── backend/                      // Node.js + Express API
 │   ├── config/
 │   │   └── db.js                         // MongoDB connection logic
+│   ├── controllers/
+│   │   └── userController.js             // Auth logic (register, login, profile)
+│   ├── middleware/
+│   │   ├── authMiddleware.js             // JWT protection logic
+│   │   └── errorMiddleware.js            // Custom error handling
+│   ├── models/
+│   │   └── userModel.js                  // Mongoose schema with bcrypt hashing
+│   ├── routes/
+│   │   └── userRoutes.js                 // Express router for /api/users
+│   ├── utils/
+│   │   └── generateToken.js              // JWT generation & secure cookie logic
 │   ├── server.js                         // Express application entry point
-│   ├── package.json                      // Backend dependencies (Express, Mongoose)
-│   └── .env                              // Environment variables (MONGO_URI, PORT)
+│   ├── package.json                      // Backend dependencies
+│   └── .env                              // Environment variables (MONGO_URI, JWT_SECRET, PORT)
 │
 ├── README.md                     // This file
 └── .gitignore
