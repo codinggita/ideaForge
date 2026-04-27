@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import SwapForm from "../components/auth/SwapForm";
+import { AuthContext } from "../context/AuthContext";
 
 const loginFeatures = [
   { label: "Workspace Switching", value: "Live" },
@@ -10,24 +11,48 @@ const loginFeatures = [
 
 export default function LoginPage() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [isSignIn, setIsSignIn] = useState(true);
   const [authMode, setAuthMode] = useState("idle");
-  const message = searchParams.get("message") || undefined;
+  const [localMessage, setLocalMessage] = useState(searchParams.get("message") || undefined);
+  
+  const { login, register, userInfo, error } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/dashboard');
+    }
+  }, [userInfo, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      setLocalMessage(error);
+    }
+  }, [error]);
 
   const handleGoogleLogin = async () => {
     setAuthMode("google");
     setTimeout(() => {
       setAuthMode("idle");
-      alert("Mock: Google Login Initiated");
+      alert("Mock: Google Login Initiated. Backend OAuth needed.");
     }, 1500);
   };
 
   const handleEmailSubmit = async (payload) => {
     setAuthMode(payload.mode);
-    setTimeout(() => {
+    setLocalMessage(null); // Clear previous errors
+    try {
+      if (payload.mode === "signin") {
+        await login(payload.email, payload.password);
+      } else {
+        await register(payload.name, payload.email, payload.password);
+      }
+    } catch (err) {
+      // Error is handled in context and surfaced via useEffect
+      console.error(err);
+    } finally {
       setAuthMode("idle");
-      alert(`Mock: ${payload.mode} successful for ${payload.email}`);
-    }, 1500);
+    }
   };
 
   return (
@@ -74,7 +99,7 @@ export default function LoginPage() {
             onModeChange={setIsSignIn}
             onGoogleLogin={handleGoogleLogin}
             onEmailSubmit={handleEmailSubmit}
-            message={message}
+            message={localMessage}
             isGoogleLoading={authMode === "google"}
             isEmailLoading={authMode === "signin" || authMode === "signup"}
             texts={{

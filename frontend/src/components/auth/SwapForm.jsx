@@ -27,6 +27,7 @@ export default function SwapForm({
   texts = {},
 }) {
   const mergedTexts = { ...DEFAULT_LOGIN_TEXTS, ...texts };
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -41,6 +42,7 @@ export default function SwapForm({
     if (!email.trim() || !password.trim() || isEmailLoading) return;
     await onEmailSubmit({
       mode: isSignIn ? "signin" : "signup",
+      name: !isSignIn ? name.trim() : undefined,
       email: email.trim(),
       password,
     });
@@ -106,6 +108,23 @@ export default function SwapForm({
           </div>
 
           <form className="space-y-6" onSubmit={handleSubmit}>
+            {!isSignIn && (
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-[#243041]" htmlFor="name">
+                  Full Name
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  autoComplete="name"
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  placeholder="John Doe"
+                  className="w-full rounded-xl border border-[#d8e0e8] bg-[#f8fafc] px-4 py-3 text-[15px] text-[#243041] shadow-sm outline-none transition focus:border-[#35527d] focus:ring-1 focus:ring-[#35527d]/20"
+                />
+              </div>
+            )}
+
             <div>
               <label className="mb-1.5 block text-sm font-medium text-[#243041]" htmlFor="email">
                 Email
