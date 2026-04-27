@@ -17,7 +17,7 @@ export default function MobileNav() {
           <span className="material-symbols-outlined" data-icon="assignment">assignment</span>
           <span className="text-[10px] font-medium uppercase tracking-widest mt-1">Tasks</span>
         </Link>
-        <Link to="#" className="flex flex-col items-center justify-center text-slate-400">
+        <Link to="/calendar" className="flex flex-col items-center justify-center text-slate-400">
           <span className="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
           <span className="text-[10px] font-medium uppercase tracking-widest mt-1">Events</span>
         </Link>

@@ -35,6 +35,11 @@ ideaForge/
 │   │   │   │   ├── GoogleAuthButton.jsx
 │   │   │   │   ├── ModeToggle.jsx
 │   │   │   │   └── SwapForm.jsx
+│   │   │   ├── calendar/                 // Calendar & Meetings page components
+│   │   │   │   ├── CalendarGrid.jsx
+│   │   │   │   ├── CalendarHeader.jsx
+│   │   │   │   ├── SchedulePanel.jsx
+│   │   │   │   └── UpcomingMeetingsScroller.jsx
 │   │   │   ├── dashboard/                // Dashboard widgets & layout
 │   │   │   │   ├── AIBriefing.jsx
 │   │   │   │   ├── DashboardLayout.jsx
@@ -57,6 +62,7 @@ ideaForge/
 │   │   │   │   ├── SuiteGrid.jsx
 │   │   │   │   └── Testimonials.jsx
 │   │   ├── pages/
+│   │   │   ├── Calendar.jsx              // Parent orchestrator for Calendar components
 │   │   │   ├── Dashboard.jsx             // Parent orchestrator for Dashboard components
 │   │   │   ├── Landing.jsx               // Parent orchestrator for Landing components
 │   │   │   └── Login.jsx                 // Parent orchestrator for Auth SwapForm
@@ -71,7 +77,11 @@ ideaForge/
 │   └── postcss.config.js
 │
 ├── backend/                      // Node.js + Express API (Phase 2)
-│   └── .gitkeep                          // Placeholder — scaffolding coming soon
+│   ├── config/
+│   │   └── db.js                         // MongoDB connection logic
+│   ├── server.js                         // Express application entry point
+│   ├── package.json                      // Backend dependencies (Express, Mongoose)
+│   └── .env                              // Environment variables (MONGO_URI, PORT)
 │
 ├── README.md                     // This file
 └── .gitignore

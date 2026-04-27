@@ -27,6 +27,10 @@ export default function Sidebar() {
           <span className="material-symbols-outlined text-[20px]" data-icon="lightbulb">lightbulb</span>
           <span>Idea Evaluator</span>
         </Link>
+        <Link to="/calendar" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition-colors font-medium text-sm tracking-[-0.02em]">
+          <span className="material-symbols-outlined text-[20px]" data-icon="calendar_today">calendar_today</span>
+          <span>Calendar & Meetings</span>
+        </Link>
         <Link to="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition-colors font-medium text-sm tracking-[-0.02em]">
           <span className="material-symbols-outlined text-[20px]" data-icon="tactic">tactic</span>
           <span>Project Management</span>
