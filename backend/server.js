@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import userRoutes from './routes/userRoutes.js';
+import projectRoutes from './routes/projectRoutes.js';
 
 // Load env vars
 dotenv.config();
@@ -22,6 +23,7 @@ app.use(cookieParser());
 
 // Mount Routes
 app.use('/api/users', userRoutes);
+app.use('/api/projects', projectRoutes);
 
 // Basic Route for testing
 app.get('/api', (req, res) => {
