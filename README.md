@@ -80,13 +80,22 @@ ideaForge/
 │   ├── config/
 │   │   └── db.js                         // MongoDB connection logic
 │   ├── controllers/
+│   │   ├── meetingController.js          // Meetings CRUD logic
+│   │   ├── projectController.js          // Projects CRUD logic
+│   │   ├── taskController.js             // Tasks CRUD logic
 │   │   └── userController.js             // Auth logic (register, login, profile)
 │   ├── middleware/
 │   │   ├── authMiddleware.js             // JWT protection logic
 │   │   └── errorMiddleware.js            // Custom error handling
 │   ├── models/
+│   │   ├── meetingModel.js               // Mongoose schema for Meetings
+│   │   ├── projectModel.js               // Mongoose schema for Projects
+│   │   ├── taskModel.js                  // Mongoose schema for Tasks
 │   │   └── userModel.js                  // Mongoose schema with bcrypt hashing
 │   ├── routes/
+│   │   ├── meetingRoutes.js              // Express router for /api/meetings
+│   │   ├── projectRoutes.js              // Express router for /api/projects
+│   │   ├── taskRoutes.js                 // Express router for /api/tasks
 │   │   └── userRoutes.js                 // Express router for /api/users
 │   ├── utils/
 │   │   └── generateToken.js              // JWT generation & secure cookie logic
