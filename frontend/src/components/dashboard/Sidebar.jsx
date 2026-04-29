@@ -46,9 +46,9 @@ export default function Sidebar() {
           <span className="material-symbols-outlined text-[20px]" data-icon="account_balance">account_balance</span>
           <span>Portfolio Valuator</span>
         </Link>
-        <Link to="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition-colors font-medium text-sm tracking-[-0.02em] border-l-4 border-transparent opacity-50 cursor-not-allowed">
+        <Link to="/teams" className={getLinkClasses('/teams')}>
           <span className="material-symbols-outlined text-[20px]" data-icon="groups">groups</span>
-          <span>Team Leaderboard</span>
+          <span>Team Management</span>
         </Link>
         <Link to="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition-colors font-medium text-sm tracking-[-0.02em] border-l-4 border-transparent opacity-50 cursor-not-allowed">
           <span className="material-symbols-outlined text-[20px]" data-icon="assessment">assessment</span>

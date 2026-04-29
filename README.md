@@ -8,6 +8,7 @@ IdeaForge is a full-featured SaaS platform designed for operational planning, ta
 - **Project Management:** Kanban-style columns to track projects through Planning, Active, and Completed phases.
 - **Task Execution:** A fast, responsive task list with optimistic UI updates and completion toggles.
 - **Google Calendar Integration:** A fully functional, mathematically accurate monthly calendar view that fetches your live schedule directly from Google. Includes an agenda panel and an upcoming meetings scroller with instant "Join Meeting" links.
+- **Team Management:** Create teams, invite colleagues by email, assign roles (Owner, Admin, Member), and manage team membership with a sleek slide-out detail panel.
 - **Secure Authentication:** JWT-based session management alongside seamless 1-click Google OAuth login.
 - **Profile Management:** Update your display name and job title instantly across the entire application.
 
