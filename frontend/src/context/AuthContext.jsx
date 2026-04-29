@@ -88,8 +88,33 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Update Profile Function
+  const updateProfile = async (userData) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const config = {
+        headers: { 'Content-Type': 'application/json' },
+      };
+
+      const { data } = await axios.put('/api/users/profile', userData, config);
+      
+      setUserInfo(data);
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      return data;
+    } catch (err) {
+      const message = err.response && err.response.data.message 
+        ? err.response.data.message 
+        : err.message;
+      setError(message);
+      throw new Error(message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ userInfo, loading, error, login, register, logout }}>
+    <AuthContext.Provider value={{ userInfo, loading, error, login, register, logout, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );

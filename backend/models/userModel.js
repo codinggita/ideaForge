@@ -33,6 +33,10 @@ const userSchema = mongoose.Schema(
       default: 'user',
       enum: ['user', 'admin'],
     },
+    jobTitle: {
+      type: String,
+      default: '',
+    },
   },
   {
     timestamps: true,

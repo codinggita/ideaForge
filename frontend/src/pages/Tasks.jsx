@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Plus, Loader2, CheckCircle2, Circle, Clock, Filter, ArrowUpDown } from 'lucide-react';
+import { Plus, Loader2, CheckCircle2 } from 'lucide-react';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import Modal from '../components/common/Modal';
 import CreateTaskForm from '../components/forms/CreateTaskForm';
+import TaskToolbar from '../components/tasks/TaskToolbar';
+import TaskListItem from '../components/tasks/TaskListItem';
 
 export default function TasksPage() {
   const [tasks, setTasks] = useState([]);
@@ -67,22 +69,7 @@ export default function TasksPage() {
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 flex-1 overflow-hidden flex flex-col">
-          {/* Toolbar */}
-          <div className="px-6 py-4 border-b border-slate-100 flex flex-wrap gap-4 justify-between items-center bg-[#f8fafc]">
-            <div className="flex items-center gap-2 text-sm font-medium text-slate-600">
-              <span className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg shadow-sm">All Tasks</span>
-              <span className="px-3 py-1.5 hover:bg-slate-100 rounded-lg cursor-pointer transition-colors text-slate-500">Incomplete</span>
-              <span className="px-3 py-1.5 hover:bg-slate-100 rounded-lg cursor-pointer transition-colors text-slate-500">Completed</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 transition-colors">
-                <Filter className="w-4 h-4" /> Filter
-              </button>
-              <button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 transition-colors">
-                <ArrowUpDown className="w-4 h-4" /> Sort
-              </button>
-            </div>
-          </div>
+          <TaskToolbar />
 
           {/* Task List */}
           <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
@@ -102,42 +89,7 @@ export default function TasksPage() {
             ) : (
               <div className="space-y-3">
                 {tasks.map(task => (
-                  <div 
-                    key={task._id} 
-                    className={`group flex items-center justify-between p-4 rounded-xl border transition-all ${
-                      task.isCompleted 
-                        ? 'bg-slate-50 border-slate-100' 
-                        : 'bg-white border-slate-200 hover:border-secondary/30 hover:shadow-sm'
-                    }`}
-                  >
-                    <div className="flex items-center gap-4 flex-1 min-w-0">
-                      <button 
-                        onClick={() => toggleTaskStatus(task)}
-                        className={`shrink-0 transition-colors ${task.isCompleted ? 'text-green-500' : 'text-slate-300 hover:text-secondary'}`}
-                      >
-                        {task.isCompleted ? <CheckCircle2 className="w-6 h-6" /> : <Circle className="w-6 h-6" />}
-                      </button>
-                      <div className="flex-1 min-w-0">
-                        <p className={`text-sm font-medium truncate ${task.isCompleted ? 'line-through text-slate-400' : 'text-primary'}`}>
-                          {task.title}
-                        </p>
-                        {task.project && (
-                          <p className="text-[11px] text-slate-500 truncate mt-0.5">Project: {task.project.title}</p>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-6 ml-4 shrink-0">
-                      {task.dueDate && (
-                        <div className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md ${
-                          task.isCompleted ? 'text-slate-400 bg-slate-100/50' : 'text-secondary bg-secondary/5'
-                        }`}>
-                          <Clock className="w-3.5 h-3.5" />
-                          {new Date(task.dueDate).toLocaleDateString([], { month: 'short', day: 'numeric' })}
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                  <TaskListItem key={task._id} task={task} toggleTaskStatus={toggleTaskStatus} />
                 ))}
               </div>
             )}

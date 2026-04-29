@@ -1,143 +1,80 @@
-# IdeaForge (MERN Stack)
+# IdeaForge 🚀
 
-## 📌 Context
-This repository contains the full **IdeaForge** project, structured as a clean **MERN Stack** (MongoDB, Express, React, Node.js) monorepo. The codebase is split into two top-level directories — `frontend/` and `backend/` — to enforce strict separation of concerns between the client-side SPA and the server-side API layer.
+IdeaForge is a full-featured SaaS platform designed for operational planning, task execution, and team synchronization. It provides a beautiful, dynamic dashboard with real-time analytics, comprehensive project/task management, and seamless Google Calendar integration.
 
-This Pull Request represents **Phase 1** of our development, establishing the complete `Landing Page` and `Login` UI flows on the frontend, utilizing a centralized data structure (`utils.js`) and UI timeout mockups to simulate backend behavior until the Node/Express server is wired up.
+## ✨ Features
 
-## 🏗️ Architecture & Philosophy
+- **Dynamic Analytics Dashboard:** Live tracking of project health, task completion rates, and an AI-driven briefing banner.
+- **Project Management:** Kanban-style columns to track projects through Planning, Active, and Completed phases.
+- **Task Execution:** A fast, responsive task list with optimistic UI updates and completion toggles.
+- **Google Calendar Integration:** A fully functional, mathematically accurate monthly calendar view that fetches your live schedule directly from Google. Includes an agenda panel and an upcoming meetings scroller with instant "Join Meeting" links.
+- **Secure Authentication:** JWT-based session management alongside seamless 1-click Google OAuth login.
+- **Profile Management:** Update your display name and job title instantly across the entire application.
 
-The primary objective of this architecture is velocity and clean decoupling. The monorepo structure ensures both the React client and the Express API are developed side by side, while remaining independently deployable.
+## 🛠️ Tech Stack
 
-- **Core Framework**: React 18 
-- **Bundler**: Vite (Lightning fast HMR & production builds)
-- **Styling Architecture**: Tailwind CSS (PostCSS)
-- **Routing Layer**: `react-router-dom` v6
-- **Animations**: `framer-motion` (Motion/React physics)
-- **Types**: Vanilla JS / `.jsx`. We've strictly kept the stack lean with lightweight standard JavaScript components.
+- **Frontend:** React 18, Vite, Tailwind CSS (for modern UI utility styling), Axios, Lucide React (for iconography).
+- **Backend:** Node.js, Express.js, MongoDB (Mongoose ORM).
+- **Integrations:** Google APIs (`googleapis` package) for OAuth2 and Google Calendar data.
+- **Authentication:** JSON Web Tokens (JWT) & bcryptjs.
 
-### 🛑 Routing Rules (For Senior Developers)
-**CRITICAL:** Under no circumstances should native HTML anchor tags (`<a href="...">`) be used for internal app navigation. Our application relies entirely on client-side routing to maintain state and provide a seamless, SPA experience.
-- Always use `react-router-dom`'s `<Link to="...">` component for declarative navigation.
-- Use the `useNavigate()` hook for programmatic navigation (e.g., after form submissions).
-- This ensures we avoid full page reloads and maintain the lightning-fast performance of Vite.
+## 🚀 Quick Start
 
-## 📂 Project Structure Overview
+### Prerequisites
+- Node.js (v18+)
+- MongoDB instance (local or Atlas)
+- Google Cloud Console project with OAuth 2.0 Credentials (for Calendar & Login)
 
-```text
-ideaForge/
-├── frontend/                     // React + Vite SPA Client
-│   ├── src/
-│   │   ├── components/                   // Domain-specific UI blocks
-│   │   │   ├── auth/                     // Login & Signup components
-│   │   │   │   ├── AuthLayout.jsx
-│   │   │   │   ├── EmailForm.jsx
-│   │   │   │   ├── GoogleAuthButton.jsx
-│   │   │   │   ├── ModeToggle.jsx
-│   │   │   │   └── SwapForm.jsx
-│   │   │   ├── calendar/                 // Calendar & Meetings page components
-│   │   │   │   ├── CalendarGrid.jsx
-│   │   │   │   ├── CalendarHeader.jsx
-│   │   │   │   ├── SchedulePanel.jsx
-│   │   │   │   └── UpcomingMeetingsScroller.jsx
-│   │   │   ├── dashboard/                // Dashboard widgets & layout
-│   │   │   │   ├── AIBriefing.jsx
-│   │   │   │   ├── DashboardLayout.jsx
-│   │   │   │   ├── Greeting.jsx
-│   │   │   │   ├── MobileNav.jsx
-│   │   │   │   ├── RecentEmails.jsx
-│   │   │   │   ├── RecentEvaluations.jsx
-│   │   │   │   ├── Sidebar.jsx
-│   │   │   │   ├── StatsOverview.jsx
-│   │   │   │   ├── TodaysTasks.jsx
-│   │   │   │   ├── Topbar.jsx
-│   │   │   │   └── UpcomingMeetings.jsx
-│   │   │   ├── landing/                  // Landing page components
-│   │   │   │   ├── CoreFlow.jsx
-│   │   │   │   ├── Footer.jsx
-│   │   │   │   ├── HeroSection.jsx
-│   │   │   │   ├── ModulesSection.jsx
-│   │   │   │   ├── Navbar.jsx
-│   │   │   │   ├── PricingSection.jsx
-│   │   │   │   ├── SuiteGrid.jsx
-│   │   │   │   └── Testimonials.jsx
-│   │   ├── pages/
-│   │   │   ├── Calendar.jsx              // Parent orchestrator for Calendar components
-│   │   │   ├── Dashboard.jsx             // Parent orchestrator for Dashboard components
-│   │   │   ├── Landing.jsx               // Parent orchestrator for Landing components
-│   │   │   └── Login.jsx                 // Parent orchestrator for Auth SwapForm
-│   │   ├── utils.js                      // Centralized static data / content configs
-│   │   ├── App.jsx                       // React Router configuration
-│   │   ├── main.jsx                      // DOM root injection
-│   │   └── index.css                     // Global Tailwind entry
-│   ├── index.html
-│   ├── package.json
-│   ├── vite.config.js
-│   ├── tailwind.config.js
-│   └── postcss.config.js
-│
-├── backend/                      // Node.js + Express API
-│   ├── config/
-│   │   └── db.js                         // MongoDB connection logic
-│   ├── controllers/
-│   │   ├── meetingController.js          // Meetings CRUD logic
-│   │   ├── projectController.js          // Projects CRUD logic
-│   │   ├── taskController.js             // Tasks CRUD logic
-│   │   └── userController.js             // Auth logic (register, login, profile)
-│   ├── middleware/
-│   │   ├── authMiddleware.js             // JWT protection logic
-│   │   └── errorMiddleware.js            // Custom error handling
-│   ├── models/
-│   │   ├── meetingModel.js               // Mongoose schema for Meetings
-│   │   ├── projectModel.js               // Mongoose schema for Projects
-│   │   ├── taskModel.js                  // Mongoose schema for Tasks
-│   │   └── userModel.js                  // Mongoose schema with bcrypt hashing
-│   ├── routes/
-│   │   ├── meetingRoutes.js              // Express router for /api/meetings
-│   │   ├── projectRoutes.js              // Express router for /api/projects
-│   │   ├── taskRoutes.js                 // Express router for /api/tasks
-│   │   └── userRoutes.js                 // Express router for /api/users
-│   ├── utils/
-│   │   └── generateToken.js              // JWT generation & secure cookie logic
-│   ├── server.js                         // Express application entry point
-│   ├── package.json                      // Backend dependencies
-│   └── .env                              // Environment variables (MONGO_URI, JWT_SECRET, PORT)
-│
-├── README.md                     // This file
-└── .gitignore
+### 1. Clone the repository
+```bash
+git clone https://github.com/KHUSHPATEL143/ideaForge.git
+cd ideaForge
 ```
 
-### 🧠 The `utils.js` Philosophy (Content Management)
-To prevent our view components (`Landing.jsx`, `PricingSection.jsx`, etc.) from becoming bloated with static marketing copy, pricing stats, and feature lists, **all static data has been extracted into `utils.js`**. 
-- Our components are highly focused on React rendering, UI hooks, and view logic.
-- `utils.js` acts as our pseudo-CMS. If marketing needs a verbiage change, we update the object arrays in this file safely without risking component breakage.
+### 2. Environment Setup
+Create a `.env` file in the `backend/` directory:
+```env
+NODE_ENV=development
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+```
 
-## 🔭 Notes for the Reviewer
-
-When reviewing this PR, please pay attention to the following architectural milestones:
-
-1. **Monorepo Structure**: The project is split into `frontend/` and `backend/` directories. All frontend dependencies, configs, and source code live exclusively inside `frontend/`. The `backend/` directory is reserved for the upcoming Express API layer.
-2. **Clean JSX Environment**: Verify the clean layout of standard React `.jsx` syntax and modern hooks.
-3. **Design Fidelity**: Examine `Landing.jsx`. The design specifications (glassmorphism boundaries, blur, shadows) have been built purely through Tailwind utility classes.
-4. **Data Injection Model**: Observe how `kpiMetrics`, `productSuiteFeatures`, and `testimonialsData` are seamlessly imported and dynamically mapped from `utils.js`. This is the exact pattern we will use when mapping API payloads from our Express backend later.
-5. **Mocked Authentication (No JWT Yet)**: The `Login` component features a fully built visual UI with timers wrapping the button states (`SwapForm.jsx`). No JWT or true auth is active yet. We will hook a Node/Express backend to this visual shell in a future iteration.
-
-## 🚀 Setup & Local Execution
-
-Since all frontend code now lives inside `frontend/`, run these commands from that directory:
-
+### 3. Install Dependencies
 ```bash
-# 1. Navigate to the frontend
-cd frontend
-
-# 2. Install fresh dependencies
+# Install backend dependencies
+cd backend
 npm install
 
-# 3. Launch local dev server (HMR enabled)
-npm run dev
-
-# 4. Simulate production bundles
-npm run build
+# Install frontend dependencies
+cd ../frontend
+npm install
 ```
 
-The application mounts entirely on client-side and can be run instantly at `http://localhost:5173/`.
+### 4. Run the Application
+You can run both the frontend and backend concurrently.
+```bash
+# In the backend directory
+npm run dev
+
+# In the frontend directory
+npm run dev
+```
+
+Visit `http://localhost:5173` to view the application.
+
+## 📁 Project Structure
+
+IdeaForge is built with a clean, component-based architecture:
+- `frontend/src/components/dashboard/`: Core layout wrappers and navigation.
+- `frontend/src/components/calendar/`: Dynamic grid logic and agenda panels.
+- `frontend/src/components/projects/`: Project columns and draggable cards.
+- `frontend/src/components/tasks/`: Task lists, toolbars, and completion toggles.
+- `frontend/src/components/settings/`: Profile configuration forms.
+- `backend/controllers/`: Business logic for aggregating stats and handling API requests.
+- `backend/routes/`: Express router definitions.
+
+---
+*Developed by Khush Patel*
