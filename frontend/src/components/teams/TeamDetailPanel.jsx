@@ -11,12 +11,8 @@ export default function TeamDetailPanel({ team, onClose, onTeamUpdated }) {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const currentUserMembership = team.members.find(
-    (m) => String(m.user?._id || m.user) === String(userInfo?._id)
-  );
-  const isOwnerOrAdmin =
-    currentUserMembership?.role === 'owner' || currentUserMembership?.role === 'admin';
-  const isOwner = currentUserMembership?.role === 'owner';
+  const isOwnerOrAdmin = team.myRole === 'owner' || team.myRole === 'admin';
+  const isOwner = team.myRole === 'owner';
 
   const handleAddMember = async (e) => {
     e.preventDefault();
