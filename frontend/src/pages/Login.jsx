@@ -30,12 +30,9 @@ export default function LoginPage() {
     }
   }, [error]);
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin = () => {
     setAuthMode("google");
-    setTimeout(() => {
-      setAuthMode("idle");
-      alert("Mock: Google Login Initiated. Backend OAuth needed.");
-    }, 1500);
+    window.location.href = "http://localhost:5000/api/auth/google";
   };
 
   const handleEmailSubmit = async (payload) => {

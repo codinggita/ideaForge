@@ -8,6 +8,8 @@ import userRoutes from './routes/userRoutes.js';
 import projectRoutes from './routes/projectRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
 import meetingRoutes from './routes/meetingRoutes.js';
+import googleAuthRoutes from './routes/googleAuthRoutes.js';
+import gmailRoutes from './routes/gmailRoutes.js';
 
 // Load env vars
 dotenv.config();
@@ -25,9 +27,11 @@ app.use(cookieParser());
 
 // Mount Routes
 app.use('/api/users', userRoutes);
+app.use('/api/auth/google', googleAuthRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/meetings', meetingRoutes);
+app.use('/api/gmail', gmailRoutes);
 
 // Basic Route for testing
 app.get('/api', (req, res) => {

@@ -1,41 +1,82 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Loader2 } from 'lucide-react';
 
 export default function RecentEmails() {
+  const [emails, setEmails] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchEmails = async () => {
+      try {
+        const { data } = await axios.get('/api/gmail/recent');
+        setEmails(data);
+      } catch (err) {
+        setError(err.response?.data?.message || err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEmails();
+  }, []);
+
+  const formatTime = (dateString) => {
+    const date = new Date(dateString);
+    const today = new Date();
+    
+    if (date.toDateString() === today.toDateString()) {
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    
+    return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+  };
+
   return (
-    <section className="bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_20px_rgba(2,36,72,0.03)] border border-white">
+    <section className="bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_20px_rgba(2,36,72,0.03)] border border-white h-full flex flex-col">
       <div className="flex justify-between items-center mb-6">
         <h4 className="text-sm font-bold text-primary tracking-tight">Recent Emails</h4>
-        <Link to="#" className="text-[10px] font-bold text-secondary uppercase tracking-widest flex items-center gap-1">
+        <a href="https://mail.google.com" target="_blank" rel="noreferrer" className="text-[10px] font-bold text-secondary uppercase tracking-widest flex items-center gap-1 hover:underline">
           Open Gmail <span className="material-symbols-outlined text-[14px]">open_in_new</span>
-        </Link>
+        </a>
       </div>
-      <div className="space-y-5">
-        {/* Email Row 1 */}
-        <div className="flex items-start gap-3">
-          <img className="w-8 h-8 rounded-full shadow-sm" data-alt="circular profile icon for Morgan Chase" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkFfm_bfcq_yn5YyrCK8HszGFA4l0o09O4NANmcEq1lJZBXVrCPX9hcGDK6j78ea8HaCJLTQdYKNFGrRj0GTgArbCLJQf--lHJfWJ55NVzOqGzbGerppVO3PV6dNTz3aZ0wthXhxTCbuUZ2TVl7cQGMxcU8uVRqU1UmId9fxc9yUWruglT4en3d4-2A4pGpWWkN4lMG7Qk1RKbo8cyTOmzdjwEJsgnB7BQc8XfEenb66qxSrQi-M9_aTsCyRB57UvXf1IEZ7bPWW4" />
-          <div className="flex-1">
-            <div className="flex justify-between items-baseline">
-              <p className="text-xs font-bold text-primary">Morgan Chase</p>
-              <span className="text-[10px] text-on-surface-variant">08:42 AM</span>
-            </div>
-            <p className="text-[11px] font-semibold text-primary truncate mt-0.5">Investment Deck Feedback</p>
-            <p className="text-[10px] text-slate-400 truncate mt-0.5">Hi Arjun, I've reviewed the latest projections and have some thoughts...</p>
+      
+      <div className="flex-1 space-y-5 overflow-y-auto custom-scrollbar">
+        {loading ? (
+          <div className="flex justify-center py-4">
+            <Loader2 className="w-5 h-5 animate-spin text-slate-400" />
           </div>
-        </div>
-
-        {/* Email Row 2 */}
-        <div className="flex items-start gap-3">
-          <img className="w-8 h-8 rounded-full shadow-sm" data-alt="circular profile icon for Sarah Lee" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPNUAW858IWqyDNhFG_mRtDkuKqvBbSrzNseOuh1Ov8OLGk-mgI8vlCQcT3EwxIAiK7QPMhTh_DYaynSYVg6xGXanubQX8UUHbtQVB8TVjKl0JJkhRyxaTPoifpZVHHX-U7uNa5UMHS80OqMpB7vknOJCoJgW3JwQmQKB9TY4-i2puRlDIB8dPYHZHhrtNAsHTp4E0o_fZTTyABNrES-mu4PO4eAYYqF_7jO5QIHST-vmzHqFZsedX_XI_zHnI_iwEzqrZQD2eUJU" />
-          <div className="flex-1">
-            <div className="flex justify-between items-baseline">
-              <p className="text-xs font-bold text-primary">Sarah Lee</p>
-              <span className="text-[10px] text-on-surface-variant">Yesterday</span>
+        ) : error ? (
+          <div className="text-center text-sm text-red-500 py-4">{error}</div>
+        ) : emails.length === 0 ? (
+          <div className="text-center text-sm text-slate-500 py-4">Inbox zero!</div>
+        ) : (
+          emails.map((email) => (
+            <div key={email._id} className={`flex items-start gap-3 p-2 -mx-2 rounded-lg hover:bg-slate-50 transition-colors ${!email.isRead ? 'bg-blue-50/30' : ''}`}>
+              <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-primary font-bold text-xs shrink-0">
+                {email.senderName.charAt(0).toUpperCase()}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex justify-between items-baseline gap-2">
+                  <p className={`text-xs truncate ${!email.isRead ? 'font-bold text-primary' : 'font-medium text-slate-700'}`}>
+                    {email.senderName}
+                  </p>
+                  <span className={`text-[10px] shrink-0 ${!email.isRead ? 'font-bold text-secondary' : 'text-slate-400'}`}>
+                    {formatTime(email.receivedAt)}
+                  </span>
+                </div>
+                <p className={`text-[11px] truncate mt-0.5 ${!email.isRead ? 'font-bold text-primary' : 'font-medium text-slate-600'}`}>
+                  {email.subject}
+                </p>
+                <p className="text-[10px] text-slate-400 truncate mt-0.5" dangerouslySetInnerHTML={{ __html: email.snippet }} />
+              </div>
+              {!email.isRead && (
+                <div className="w-2 h-2 rounded-full bg-secondary mt-1.5 shrink-0" />
+              )}
             </div>
-            <p className="text-[11px] font-semibold text-primary truncate mt-0.5">Onboarding Documents</p>
-            <p className="text-[10px] text-slate-400 truncate mt-0.5">Please sign the attached NDA for the Project Skyfall evaluation.</p>
-          </div>
-        </div>
+          ))
+        )}
       </div>
     </section>
   );
