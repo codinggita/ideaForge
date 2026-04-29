@@ -3,16 +3,19 @@ import { google } from 'googleapis';
 import User from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
 
-const oauth2Client = new google.auth.OAuth2(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  'http://localhost:5000/api/auth/google/callback'
-);
+const getOAuth2Client = () => {
+  return new google.auth.OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    'http://localhost:5000/api/auth/google/callback'
+  );
+};
 
 // @desc    Redirect to Google OAuth consent screen
 // @route   GET /api/auth/google
 // @access  Public
 const googleAuth = asyncHandler(async (req, res) => {
+  const oauth2Client = getOAuth2Client();
   const scopes = [
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/userinfo.email',
@@ -39,6 +42,8 @@ const googleCallback = asyncHandler(async (req, res) => {
   if (!code) {
     return res.status(400).send('Authorization code is missing.');
   }
+
+  const oauth2Client = getOAuth2Client();
 
   try {
     const { tokens } = await oauth2Client.getToken(code);
