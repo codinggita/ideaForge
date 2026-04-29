@@ -12,7 +12,7 @@ export default function TeamDetailPanel({ team, onClose, onTeamUpdated }) {
   const [success, setSuccess] = useState('');
 
   const currentUserMembership = team.members.find(
-    (m) => (m.user?._id || m.user) === userInfo?._id
+    (m) => String(m.user?._id || m.user) === String(userInfo?._id)
   );
   const isOwnerOrAdmin =
     currentUserMembership?.role === 'owner' || currentUserMembership?.role === 'admin';
@@ -144,7 +144,7 @@ export default function TeamDetailPanel({ team, onClose, onTeamUpdated }) {
               const memberName = member.user?.name || 'User';
               const memberEmail = member.user?.email || '';
               const memberJobTitle = member.user?.jobTitle || '';
-              const isSelf = memberId === userInfo?._id;
+              const isSelf = String(memberId) === String(userInfo?._id);
 
               return (
                 <div
