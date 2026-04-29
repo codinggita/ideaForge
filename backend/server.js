@@ -11,6 +11,7 @@ import meetingRoutes from './routes/meetingRoutes.js';
 import googleAuthRoutes from './routes/googleAuthRoutes.js';
 import gmailRoutes from './routes/gmailRoutes.js';
 import calendarRoutes from './routes/calendarRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js';
 
 // Load env vars
 dotenv.config();
@@ -34,6 +35,7 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/meetings', meetingRoutes);
 app.use('/api/gmail', gmailRoutes);
 app.use('/api/calendar', calendarRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Basic Route for testing
 app.get('/api', (req, res) => {
