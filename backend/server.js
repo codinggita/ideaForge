@@ -13,6 +13,7 @@ import gmailRoutes from './routes/gmailRoutes.js';
 import calendarRoutes from './routes/calendarRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import teamRoutes from './routes/teamRoutes.js';
+import reportRoutes from './routes/reportRoutes.js';
 
 // Load env vars
 dotenv.config();
@@ -38,6 +39,7 @@ app.use('/api/gmail', gmailRoutes);
 app.use('/api/calendar', calendarRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/teams', teamRoutes);
+app.use('/api/reports', reportRoutes);
 
 // Basic Route for testing
 app.get('/api', (req, res) => {

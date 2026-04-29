@@ -27,6 +27,11 @@ const projectSchema = mongoose.Schema(
       enum: ['Low', 'Medium', 'High'],
       default: 'Medium',
     },
+    team: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Team',
+      default: null,
+    },
   },
   {
     timestamps: true,

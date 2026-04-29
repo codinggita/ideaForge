@@ -1,13 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Loader2 } from 'lucide-react';
 
-export default function CreateTaskForm({ onSuccess, onCancel }) {
+export default function CreateTaskForm({ onSuccess, onCancel, defaultTeam }) {
   const [title, setTitle] = useState('');
   const [dueDate, setDueDate] = useState('');
+  const [teamId, setTeamId] = useState(defaultTeam || '');
+  const [assignedTo, setAssignedTo] = useState('');
+  const [teams, setTeams] = useState([]);
+  const [teamMembers, setTeamMembers] = useState([]);
   
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    axios.get('/api/teams').then(({ data }) => setTeams(data)).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (teamId) {
+      const selectedTeam = teams.find((t) => t._id === teamId);
+      setTeamMembers(selectedTeam?.members || []);
+    } else {
+      setTeamMembers([]);
+      setAssignedTo('');
+    }
+  }, [teamId, teams]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +37,9 @@ export default function CreateTaskForm({ onSuccess, onCancel }) {
     try {
       await axios.post('/api/tasks', {
         title,
-        dueDate: dueDate || undefined
+        dueDate: dueDate || undefined,
+        team: teamId || undefined,
+        assignedTo: assignedTo || undefined,
       });
       onSuccess();
     } catch (err) {
@@ -56,6 +76,40 @@ export default function CreateTaskForm({ onSuccess, onCancel }) {
           onChange={(e) => setDueDate(e.target.value)}
           className="w-full rounded-xl border border-[#d8e0e8] bg-[#f8fafc] px-4 py-2.5 text-sm text-[#243041] outline-none transition focus:border-primary focus:ring-1 focus:ring-primary/20"
         />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-[#243041] mb-1">Team (optional)</label>
+          <select
+            value={teamId}
+            onChange={(e) => setTeamId(e.target.value)}
+            className="w-full rounded-xl border border-[#d8e0e8] bg-[#f8fafc] px-4 py-2.5 text-sm text-[#243041] outline-none transition focus:border-primary focus:ring-1 focus:ring-primary/20 appearance-none"
+          >
+            <option value="">Personal</option>
+            {teams.map((t) => (
+              <option key={t._id} value={t._id}>{t.name}</option>
+            ))}
+          </select>
+        </div>
+
+        {teamId && teamMembers.length > 0 && (
+          <div>
+            <label className="block text-sm font-medium text-[#243041] mb-1">Assign To</label>
+            <select
+              value={assignedTo}
+              onChange={(e) => setAssignedTo(e.target.value)}
+              className="w-full rounded-xl border border-[#d8e0e8] bg-[#f8fafc] px-4 py-2.5 text-sm text-[#243041] outline-none transition focus:border-primary focus:ring-1 focus:ring-primary/20 appearance-none"
+            >
+              <option value="">Unassigned</option>
+              {teamMembers.map((m) => (
+                <option key={m.user?._id || m.user} value={m.user?._id || m.user}>
+                  {m.user?.name || 'User'}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       <div className="pt-4 flex justify-end gap-3">
