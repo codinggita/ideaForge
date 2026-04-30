@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import Team from '../models/teamModel.js';
 import User from '../models/userModel.js';
+import { createNotification } from './notificationController.js';
 
 // @desc    Create a new team
 // @route   POST /api/teams
@@ -22,12 +23,19 @@ const createTeam = asyncHandler(async (req, res) => {
 // @route   GET /api/teams
 // @access  Private
 const getMyTeams = asyncHandler(async (req, res) => {
-  // Find teams where the user is in the members array
   const teams = await Team.find({ 'members.user': req.user._id })
     .populate('members.user', 'name email jobTitle')
     .sort({ createdAt: -1 });
 
-  res.json(teams);
+  // Attach the requesting user's role to each team
+  const teamsWithRole = teams.map((team) => {
+    const teamObj = team.toObject();
+    const me = team.members.find((m) => m.user._id.toString() === req.user._id.toString());
+    teamObj.myRole = me ? me.role : null;
+    return teamObj;
+  });
+
+  res.json(teamsWithRole);
 });
 
 // @desc    Get team by ID
@@ -92,8 +100,19 @@ const addMember = asyncHandler(async (req, res) => {
   team.members.push({ user: userToAdd._id, role: role || 'member' });
   await team.save();
 
+  // Create notification for the added user
+  await createNotification(
+    userToAdd._id,
+    'team_invite',
+    `You were added to team "${team.name}" as ${role || 'member'}`,
+    '/teams'
+  );
+
   const updatedTeam = await Team.findById(teamId).populate('members.user', 'name email jobTitle');
-  res.json(updatedTeam);
+  const result = updatedTeam.toObject();
+  const me = updatedTeam.members.find((m) => m.user._id.toString() === req.user._id.toString());
+  result.myRole = me ? me.role : null;
+  res.json(result);
 });
 
 // @desc    Remove member from team
@@ -134,7 +153,10 @@ const removeMember = asyncHandler(async (req, res) => {
   await team.save();
 
   const updatedTeam = await Team.findById(teamId).populate('members.user', 'name email jobTitle');
-  res.json(updatedTeam);
+  const result = updatedTeam.toObject();
+  const me = updatedTeam.members.find((m) => m.user._id.toString() === req.user._id.toString());
+  result.myRole = me ? me.role : null;
+  res.json(result);
 });
 
 // @desc    Update member role
@@ -170,7 +192,10 @@ const updateMemberRole = asyncHandler(async (req, res) => {
   await team.save();
 
   const updatedTeam = await Team.findById(teamId).populate('members.user', 'name email jobTitle');
-  res.json(updatedTeam);
+  const result = updatedTeam.toObject();
+  const me = updatedTeam.members.find((m) => m.user._id.toString() === req.user._id.toString());
+  result.myRole = me ? me.role : null;
+  res.json(result);
 });
 
 export { createTeam, getMyTeams, getTeamById, addMember, removeMember, updateMemberRole };

@@ -8,6 +8,7 @@ import ProjectsPage from './pages/Projects';
 import TasksPage from './pages/Tasks';
 import SettingsPage from './pages/Settings';
 import TeamsPage from './pages/Teams';
+import ReportsPage from './pages/Reports';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/tasks" element={<TasksPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/teams" element={<TeamsPage />} />
+        <Route path="/reports" element={<ReportsPage />} />
       </Routes>
     </Router>
   );

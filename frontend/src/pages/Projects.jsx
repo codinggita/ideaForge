@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Plus, Loader2 } from 'lucide-react';
+import { Plus, Loader2, Users } from 'lucide-react';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import Modal from '../components/common/Modal';
 import CreateProjectForm from '../components/forms/CreateProjectForm';
@@ -11,15 +11,22 @@ export default function ProjectsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [teams, setTeams] = useState([]);
+  const [selectedTeam, setSelectedTeam] = useState('');
+
+  useEffect(() => {
+    axios.get('/api/teams').then(({ data }) => setTeams(data)).catch(() => {});
+  }, []);
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [selectedTeam]);
 
   const fetchProjects = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get('/api/projects');
+      const url = selectedTeam ? `/api/projects?team=${selectedTeam}` : '/api/projects';
+      const { data } = await axios.get(url);
       setProjects(data);
     } catch (err) {
       setError(err.response?.data?.message || err.message);
@@ -45,13 +52,28 @@ export default function ProjectsPage() {
             <h1 className="text-2xl font-bold text-primary tracking-tight">Project Management</h1>
             <p className="text-sm text-slate-500 mt-1">Manage and track your operational initiatives</p>
           </div>
-          <button 
-            onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-primary rounded-xl shadow-[0_8px_16px_rgba(53,82,125,0.15)] hover:bg-[#2c4567] transition-all"
-          >
-            <Plus className="w-4 h-4" />
-            New Project
-          </button>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl px-3 py-2 shadow-sm">
+              <Users className="w-4 h-4 text-slate-400" />
+              <select
+                value={selectedTeam}
+                onChange={(e) => setSelectedTeam(e.target.value)}
+                className="bg-transparent text-sm font-medium text-primary outline-none cursor-pointer"
+              >
+                <option value="">Personal</option>
+                {teams.map((t) => (
+                  <option key={t._id} value={t._id}>{t.name}</option>
+                ))}
+              </select>
+            </div>
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-primary rounded-xl shadow-[0_8px_16px_rgba(53,82,125,0.15)] hover:bg-[#2c4567] transition-all"
+            >
+              <Plus className="w-4 h-4" />
+              New Project
+            </button>
+          </div>
         </div>
 
         {loading ? (
@@ -76,7 +98,8 @@ export default function ProjectsPage() {
       >
         <CreateProjectForm 
           onSuccess={handleSuccess} 
-          onCancel={() => setIsModalOpen(false)} 
+          onCancel={() => setIsModalOpen(false)}
+          defaultTeam={selectedTeam}
         />
       </Modal>
     </DashboardLayout>

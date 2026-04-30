@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Loader2 } from 'lucide-react';
 
-export default function CreateProjectForm({ onSuccess, onCancel }) {
+export default function CreateProjectForm({ onSuccess, onCancel, defaultTeam }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState('Planning');
   const [priority, setPriority] = useState('Medium');
+  const [teamId, setTeamId] = useState(defaultTeam || '');
+  const [teams, setTeams] = useState([]);
   
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    axios.get('/api/teams').then(({ data }) => setTeams(data)).catch(() => {});
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,7 +29,8 @@ export default function CreateProjectForm({ onSuccess, onCancel }) {
         title,
         description,
         status,
-        priority
+        priority,
+        team: teamId || undefined,
       });
       onSuccess();
     } catch (err) {
@@ -90,6 +97,20 @@ export default function CreateProjectForm({ onSuccess, onCancel }) {
             <option value="High">High</option>
           </select>
         </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-[#243041] mb-1">Team (optional)</label>
+        <select
+          value={teamId}
+          onChange={(e) => setTeamId(e.target.value)}
+          className="w-full rounded-xl border border-[#d8e0e8] bg-[#f8fafc] px-4 py-2.5 text-sm text-[#243041] outline-none transition focus:border-primary focus:ring-1 focus:ring-primary/20 appearance-none"
+        >
+          <option value="">Personal Project</option>
+          {teams.map((t) => (
+            <option key={t._id} value={t._id}>{t.name}</option>
+          ))}
+        </select>
       </div>
 
       <div className="pt-4 flex justify-end gap-3">
