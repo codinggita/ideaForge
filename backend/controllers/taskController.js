@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import Task from '../models/taskModel.js';
 import Team from '../models/teamModel.js';
+import { createNotification } from './notificationController.js';
 
 // @desc    Get all tasks for the logged-in user or a team
 // @route   GET /api/tasks
@@ -76,6 +77,17 @@ const createTask = asyncHandler(async (req, res) => {
   });
 
   const createdTask = await task.save();
+
+  // Notify the assigned user
+  if (assignedTo && assignedTo !== req.user._id.toString()) {
+    await createNotification(
+      assignedTo,
+      'task_assigned',
+      `You were assigned a new task: "${title}"`,
+      '/tasks'
+    );
+  }
+
   res.status(201).json(createdTask);
 });
 

@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import Team from '../models/teamModel.js';
 import User from '../models/userModel.js';
+import { createNotification } from './notificationController.js';
 
 // @desc    Create a new team
 // @route   POST /api/teams
@@ -98,6 +99,14 @@ const addMember = asyncHandler(async (req, res) => {
 
   team.members.push({ user: userToAdd._id, role: role || 'member' });
   await team.save();
+
+  // Create notification for the added user
+  await createNotification(
+    userToAdd._id,
+    'team_invite',
+    `You were added to team "${team.name}" as ${role || 'member'}`,
+    '/teams'
+  );
 
   const updatedTeam = await Team.findById(teamId).populate('members.user', 'name email jobTitle');
   const result = updatedTeam.toObject();
