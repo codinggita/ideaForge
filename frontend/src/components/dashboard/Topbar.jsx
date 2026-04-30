@@ -10,6 +10,13 @@ export default function Topbar() {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const dropdownRef = useRef(null);
+  const searchRef = useRef(null);
+
+  // Search state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState(null);
+  const [showSearch, setShowSearch] = useState(false);
+  const searchTimerRef = useRef(null);
 
   const fetchNotifications = async () => {
     try {
@@ -32,6 +39,35 @@ export default function Topbar() {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setShowNotifs(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Search debounce
+  useEffect(() => {
+    if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+    if (searchQuery.trim().length < 2) {
+      setSearchResults(null);
+      setShowSearch(false);
+      return;
+    }
+    searchTimerRef.current = setTimeout(async () => {
+      try {
+        const { data } = await axios.get(`/api/search?q=${encodeURIComponent(searchQuery)}`);
+        setSearchResults(data);
+        setShowSearch(true);
+      } catch (err) {}
+    }, 300);
+    return () => clearTimeout(searchTimerRef.current);
+  }, [searchQuery]);
+
+  // Close search on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setShowSearch(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -92,13 +128,68 @@ export default function Topbar() {
   return (
     <header className="sticky top-0 z-40 flex justify-between items-center w-full px-8 py-4 bg-[#F7F9FB] dark:bg-slate-900 border-b border-slate-100">
       <div className="flex items-center gap-4 flex-1">
-        <div className="relative w-full max-w-md">
+        <div className="relative w-full max-w-md" ref={searchRef}>
           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
           <input 
             className="w-full pl-10 pr-4 py-2 bg-white border-none rounded-xl text-sm focus:ring-2 focus:ring-secondary/20 transition-all" 
-            placeholder="Search data, valuations, or team members..." 
+            placeholder="Search projects, tasks, teams..." 
             type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onFocus={() => { if (searchResults) setShowSearch(true); }}
+            onKeyDown={(e) => { if (e.key === 'Escape') setShowSearch(false); }}
           />
+
+          {/* Search Results Dropdown */}
+          {showSearch && searchResults && (
+            <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden z-50 max-h-[420px] overflow-y-auto">
+              {searchResults.projects.length === 0 && searchResults.tasks.length === 0 && searchResults.teams.length === 0 ? (
+                <div className="py-8 text-center text-slate-400 text-sm">No results found</div>
+              ) : (
+                <>
+                  {searchResults.projects.length > 0 && (
+                    <div>
+                      <div className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-slate-50">Projects</div>
+                      {searchResults.projects.map((p) => (
+                        <div key={p._id} onClick={() => { navigate(`/projects/${p._id}`); setShowSearch(false); setSearchQuery(''); }} className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 cursor-pointer transition-colors">
+                          <span className="material-symbols-outlined text-[18px] text-blue-500">tactic</span>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-primary truncate">{p.title}</p>
+                          </div>
+                          <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${
+                            p.status === 'Completed' ? 'bg-green-50 text-green-600' : p.status === 'Active' ? 'bg-blue-50 text-blue-600' : 'bg-slate-100 text-slate-500'
+                          }`}>{p.status}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {searchResults.tasks.length > 0 && (
+                    <div>
+                      <div className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-slate-50">Tasks</div>
+                      {searchResults.tasks.map((t) => (
+                        <div key={t._id} onClick={() => { navigate('/tasks'); setShowSearch(false); setSearchQuery(''); }} className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 cursor-pointer transition-colors">
+                          <span className={`material-symbols-outlined text-[18px] ${t.isCompleted ? 'text-green-500' : 'text-orange-500'}`}>{t.isCompleted ? 'task_alt' : 'radio_button_unchecked'}</span>
+                          <p className={`text-sm flex-1 truncate ${t.isCompleted ? 'line-through text-slate-400' : 'text-primary font-medium'}`}>{t.title}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {searchResults.teams.length > 0 && (
+                    <div>
+                      <div className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-slate-50">Teams</div>
+                      {searchResults.teams.map((t) => (
+                        <div key={t._id} onClick={() => { navigate('/teams'); setShowSearch(false); setSearchQuery(''); }} className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 cursor-pointer transition-colors">
+                          <span className="material-symbols-outlined text-[18px] text-purple-500">groups</span>
+                          <p className="text-sm font-medium text-primary flex-1 truncate">{t.name}</p>
+                          <span className="text-[11px] text-slate-400">{t.memberCount} members</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
       

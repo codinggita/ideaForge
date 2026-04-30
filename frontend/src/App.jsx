@@ -9,6 +9,7 @@ import TasksPage from './pages/Tasks';
 import SettingsPage from './pages/Settings';
 import TeamsPage from './pages/Teams';
 import ReportsPage from './pages/Reports';
+import ProjectDetailPage from './pages/ProjectDetail';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/projects/:id" element={<ProjectDetailPage />} />
         <Route path="/tasks" element={<TasksPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/teams" element={<TeamsPage />} />

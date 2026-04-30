@@ -15,6 +15,7 @@ import dashboardRoutes from './routes/dashboardRoutes.js';
 import teamRoutes from './routes/teamRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
+import searchRoutes from './routes/searchRoutes.js';
 
 // Load env vars
 dotenv.config();
@@ -42,6 +43,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/search', searchRoutes);
 
 // Basic Route for testing
 app.get('/api', (req, res) => {

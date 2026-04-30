@@ -7,7 +7,18 @@ import { createNotification } from './notificationController.js';
 // @route   GET /api/tasks
 // @access  Private
 const getTasks = asyncHandler(async (req, res) => {
-  const { team, isCompleted } = req.query;
+  const { team, isCompleted, project } = req.query;
+
+  // Filter by project
+  if (project) {
+    const query = { project };
+    if (isCompleted) query.isCompleted = isCompleted === 'true';
+    const tasks = await Task.find(query)
+      .populate('assignedTo', 'name email')
+      .populate('project', 'title')
+      .sort({ createdAt: -1 });
+    return res.json(tasks);
+  }
   
   if (team) {
     const teamDoc = await Team.findById(team);

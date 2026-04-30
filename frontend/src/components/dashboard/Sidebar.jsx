@@ -41,11 +41,7 @@ export default function Sidebar() {
           <span className="material-symbols-outlined text-[20px]" data-icon="calendar_today">calendar_today</span>
           <span>Calendar & Meetings</span>
         </Link>
-        {/* Placeholder Links for future features */}
-        <Link to="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition-colors font-medium text-sm tracking-[-0.02em] border-l-4 border-transparent opacity-50 cursor-not-allowed">
-          <span className="material-symbols-outlined text-[20px]" data-icon="account_balance">account_balance</span>
-          <span>Portfolio Valuator</span>
-        </Link>
+
         <Link to="/teams" className={getLinkClasses('/teams')}>
           <span className="material-symbols-outlined text-[20px]" data-icon="groups">groups</span>
           <span>Team Management</span>
@@ -58,8 +54,8 @@ export default function Sidebar() {
 
       <div className="mt-auto space-y-1 pt-6 border-t border-white/10">
         <button className="w-full mb-4 py-2.5 bg-secondary text-white rounded-lg text-sm font-semibold flex items-center justify-center gap-2 active:scale-95 transition-transform">
-          <span className="material-symbols-outlined text-[18px]">add</span>
-          New Valuation
+          <span className="material-symbols-outlined text-[18px]">bolt</span>
+          <span>Quick Action</span>
         </button>
         <Link to="/settings" className={getLinkClasses('/settings')}>
           <span className="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>

@@ -1,14 +1,23 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MoreVertical } from 'lucide-react';
 
 export default function ProjectCard({ project, getPriorityColor }) {
+  const navigate = useNavigate();
+
   return (
-    <div className="bg-white p-4 rounded-xl border border-[#eef2f4] shadow-sm hover:shadow-md transition-shadow cursor-grab">
+    <div 
+      onClick={() => navigate(`/projects/${project._id}`)}
+      className="bg-white p-4 rounded-xl border border-[#eef2f4] shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+    >
       <div className="flex justify-between items-start mb-2">
         <span className={`text-[10px] font-bold px-2 py-1 rounded-md border uppercase tracking-wider ${getPriorityColor(project.priority)}`}>
           {project.priority}
         </span>
-        <button className="text-slate-400 hover:text-primary transition-colors">
+        <button 
+          onClick={(e) => e.stopPropagation()} 
+          className="text-slate-400 hover:text-primary transition-colors"
+        >
           <MoreVertical className="w-4 h-4" />
         </button>
       </div>
@@ -28,3 +37,4 @@ export default function ProjectCard({ project, getPriorityColor }) {
     </div>
   );
 }
+

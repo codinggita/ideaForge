@@ -137,4 +137,33 @@ const deleteProject = asyncHandler(async (req, res) => {
   }
 });
 
-export { getProjects, createProject, updateProject, deleteProject };
+// @desc    Get project by ID
+// @route   GET /api/projects/:id
+// @access  Private
+const getProjectById = asyncHandler(async (req, res) => {
+  const project = await Project.findById(req.params.id).populate('user', 'name email');
+
+  if (project) {
+    // Check authorization (owner or team member)
+    if (project.team) {
+      const teamDoc = await Team.findById(project.team);
+      const isMember = teamDoc?.members.find(
+        (m) => m.user.toString() === req.user._id.toString()
+      );
+      if (!isMember) {
+        res.status(403);
+        throw new Error('Not authorized to view this project');
+      }
+    } else if (project.user.toString() !== req.user._id.toString()) {
+      res.status(403);
+      throw new Error('Not authorized to view this project');
+    }
+
+    res.json(project);
+  } else {
+    res.status(404);
+    throw new Error('Project not found');
+  }
+});
+
+export { getProjects, createProject, getProjectById, updateProject, deleteProject };
