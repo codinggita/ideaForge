@@ -19,6 +19,7 @@ const authUser = asyncHandler(async (req, res) => {
       email: user.email,
       role: user.role,
       jobTitle: user.jobTitle,
+      avatarUrl: user.avatarUrl,
       hasPassword: Boolean(user.password),
       googleConnected: Boolean(user.googleId),
     });
@@ -56,6 +57,7 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       role: user.role,
       jobTitle: user.jobTitle,
+      avatarUrl: user.avatarUrl,
       hasPassword: Boolean(user.password),
       googleConnected: Boolean(user.googleId),
     });
@@ -89,6 +91,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       email: user.email,
       role: user.role,
       jobTitle: user.jobTitle,
+      avatarUrl: user.avatarUrl,
       hasPassword: Boolean(user.password),
       googleConnected: Boolean(user.googleId),
     });
@@ -138,6 +141,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       email: updatedUser.email,
       role: updatedUser.role,
       jobTitle: updatedUser.jobTitle,
+      avatarUrl: updatedUser.avatarUrl,
       hasPassword: Boolean(updatedUser.password),
       googleConnected: Boolean(updatedUser.googleId),
     });

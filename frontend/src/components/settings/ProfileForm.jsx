@@ -1,16 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { ImagePlus, Loader2 } from 'lucide-react';
+import { getUserAvatar } from '../../avatar';
 
 export default function ProfileForm({ userInfo, updateProfile }) {
   const [name, setName] = useState(userInfo?.name || '');
   const [jobTitle, setJobTitle] = useState(userInfo?.jobTitle || '');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [avatarPreview, setAvatarPreview] = useState('');
+  const [avatarError, setAvatarError] = useState('');
 
   useEffect(() => {
     setName(userInfo?.name || '');
     setJobTitle(userInfo?.jobTitle || '');
   }, [userInfo?.name, userInfo?.jobTitle]);
+
+  const handleAvatarPreview = (event) => {
+    const file = event.target.files?.[0];
+    setAvatarError('');
+
+    if (!file) return;
+
+    if (!['image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
+      setAvatarError('Only JPG, PNG, or GIF images are allowed.');
+      return;
+    }
+
+    if (file.size > 800 * 1024) {
+      setAvatarError('Avatar preview must be 800K or smaller.');
+      return;
+    }
+
+    setAvatarPreview(URL.createObjectURL(file));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,14 +56,26 @@ export default function ProfileForm({ userInfo, updateProfile }) {
         <h2 className="text-lg font-bold text-primary mb-6">Profile Information</h2>
         
         <div className="flex items-center gap-6 mb-8">
-          <div className="w-20 h-20 rounded-full bg-slate-200 flex items-center justify-center text-primary text-2xl font-bold shadow-inner uppercase">
-            {userInfo?.name ? userInfo.name.charAt(0) : 'U'}
-          </div>
+          <img
+            src={avatarPreview || getUserAvatar(userInfo)}
+            alt={userInfo?.name || userInfo?.email || 'User avatar'}
+            className="w-20 h-20 rounded-full bg-slate-200 object-cover shadow-inner border border-slate-200"
+          />
           <div>
-            <button className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold text-primary hover:bg-slate-50 transition-colors shadow-sm">
-              Change Avatar
-            </button>
-            <p className="text-[11px] text-slate-400 mt-2">JPG, GIF or PNG. Max size of 800K</p>
+            <label className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold text-primary hover:bg-slate-50 transition-colors shadow-sm cursor-pointer">
+              <ImagePlus className="w-4 h-4" />
+              Preview Avatar
+              <input
+                type="file"
+                accept="image/png,image/jpeg,image/gif"
+                onChange={handleAvatarPreview}
+                className="hidden"
+              />
+            </label>
+            <p className="text-[11px] text-slate-400 mt-2">
+              Google/email avatar is used by default. JPG, GIF or PNG preview, max 800K.
+            </p>
+            {avatarError && <p className="text-[11px] text-red-500 mt-2">{avatarError}</p>}
           </div>
         </div>
 

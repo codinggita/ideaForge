@@ -7,9 +7,11 @@ const getOAuth2Client = () => {
   return new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    'http://localhost:5000/api/auth/google/callback'
+    process.env.GOOGLE_CALLBACK_URL || 'http://localhost:5000/api/auth/google/callback'
   );
 };
+
+const getFrontendUrl = () => process.env.FRONTEND_URL || 'http://localhost:5173';
 
 // @desc    Redirect to Google OAuth consent screen
 // @route   GET /api/auth/google
@@ -55,7 +57,7 @@ const googleCallback = asyncHandler(async (req, res) => {
     });
 
     const userInfo = await oauth2.userinfo.get();
-    const { id: googleId, email, name } = userInfo.data;
+    const { id: googleId, email, name, picture } = userInfo.data;
 
     let user = await User.findOne({ email });
 
@@ -67,6 +69,7 @@ const googleCallback = asyncHandler(async (req, res) => {
         user.googleRefreshToken = tokens.refresh_token;
       }
       if (!user.name) user.name = name;
+      if (picture) user.avatarUrl = picture;
       await user.save();
     } else {
       // Create new user
@@ -76,6 +79,7 @@ const googleCallback = asyncHandler(async (req, res) => {
         googleId,
         googleAccessToken: tokens.access_token,
         googleRefreshToken: tokens.refresh_token,
+        avatarUrl: picture,
       });
     }
 
@@ -83,10 +87,10 @@ const googleCallback = asyncHandler(async (req, res) => {
     generateToken(res, user._id);
 
     // Redirect back to frontend dashboard
-    res.redirect('http://localhost:5173/dashboard');
+    res.redirect(`${getFrontendUrl()}/dashboard`);
   } catch (error) {
     console.error('Error in Google OAuth callback:', error);
-    res.redirect('http://localhost:5173/login?error=google_auth_failed');
+    res.redirect(`${getFrontendUrl()}/login?error=google_auth_failed`);
   }
 });
 

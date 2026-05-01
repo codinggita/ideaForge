@@ -28,6 +28,10 @@ const userSchema = mongoose.Schema(
       type: String,
       required: false,
     },
+    avatarUrl: {
+      type: String,
+      required: false,
+    },
     role: {
       type: String,
       default: 'user',

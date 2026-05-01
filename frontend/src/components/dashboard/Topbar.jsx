@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { Moon, Sun } from 'lucide-react';
 import { AuthContext } from '../../context/AuthContext';
+import api from '../../services/api';
+import useDebounce from '../../hooks/useDebounce';
+import useSessionStorage from '../../hooks/useSessionStorage';
+import useTheme from '../../hooks/useTheme';
+import { getUserAvatar } from '../../avatar';
 
 export default function Topbar() {
   const { userInfo } = useContext(AuthContext);
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [showNotifs, setShowNotifs] = useState(false);
   const [notifications, setNotifications] = useState([]);
@@ -13,14 +19,14 @@ export default function Topbar() {
   const searchRef = useRef(null);
 
   // Search state
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useSessionStorage('ideaforge:lastSearch', '');
   const [searchResults, setSearchResults] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
-  const searchTimerRef = useRef(null);
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
   const fetchNotifications = async () => {
     try {
-      const { data } = await axios.get('/api/notifications');
+      const { data } = await api.get('/notifications');
       setNotifications(data.notifications);
       setUnreadCount(data.unreadCount);
     } catch (err) {
@@ -47,21 +53,22 @@ export default function Topbar() {
 
   // Search debounce
   useEffect(() => {
-    if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
-    if (searchQuery.trim().length < 2) {
+    if (debouncedSearchQuery.trim().length < 2) {
       setSearchResults(null);
       setShowSearch(false);
       return;
     }
-    searchTimerRef.current = setTimeout(async () => {
+
+    const searchWorkspace = async () => {
       try {
-        const { data } = await axios.get(`/api/search?q=${encodeURIComponent(searchQuery)}`);
+        const { data } = await api.get(`/search?q=${encodeURIComponent(debouncedSearchQuery)}`);
         setSearchResults(data);
         setShowSearch(true);
       } catch (err) {}
-    }, 300);
-    return () => clearTimeout(searchTimerRef.current);
-  }, [searchQuery]);
+    };
+
+    searchWorkspace();
+  }, [debouncedSearchQuery]);
 
   // Close search on outside click
   useEffect(() => {
@@ -76,7 +83,7 @@ export default function Topbar() {
 
   const handleMarkAllRead = async () => {
     try {
-      await axios.put('/api/notifications/read-all');
+      await api.put('/notifications/read-all');
       setUnreadCount(0);
       setNotifications(notifications.map((n) => ({ ...n, isRead: true })));
     } catch (err) {
@@ -87,7 +94,7 @@ export default function Topbar() {
   const handleNotifClick = async (notif) => {
     if (!notif.isRead) {
       try {
-        await axios.put(`/api/notifications/${notif._id}/read`);
+        await api.put(`/notifications/${notif._id}/read`);
         setUnreadCount((c) => Math.max(0, c - 1));
         setNotifications(notifications.map((n) => (n._id === notif._id ? { ...n, isRead: true } : n)));
       } catch (err) {}
@@ -201,6 +208,15 @@ export default function Topbar() {
         </nav>
         
         <div className="flex items-center gap-3 pl-6 border-l border-slate-200">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors"
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
+
           {/* Notification Bell */}
           <div className="relative" ref={dropdownRef}>
             <button 
@@ -265,9 +281,11 @@ export default function Topbar() {
           </div>
 
           <Link to="/settings" className="flex items-center gap-2 group cursor-pointer">
-            <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-sm font-bold text-primary uppercase border-2 border-white shadow-sm">
-              {userInfo?.name ? userInfo.name.charAt(0) : 'U'}
-            </div>
+            <img
+              src={getUserAvatar(userInfo)}
+              alt={userInfo?.name || userInfo?.email || 'User avatar'}
+              className="w-8 h-8 rounded-full object-cover border-2 border-white shadow-sm bg-slate-200"
+            />
           </Link>
         </div>
       </div>
