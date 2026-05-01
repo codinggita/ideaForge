@@ -12,13 +12,26 @@ export const AuthProvider = ({ children }) => {
   // Check if user is logged in on mount
   useEffect(() => {
     const checkUser = async () => {
+      let storedUser = null;
+
       try {
-        const storedUser = localStorage.getItem('userInfo');
+        storedUser = localStorage.getItem('userInfo');
         if (storedUser) {
           setUserInfo(JSON.parse(storedUser));
         }
       } catch (err) {
         console.error('Failed to parse user info', err);
+      }
+
+      try {
+        const { data } = await axios.get('/api/users/profile');
+        setUserInfo(data);
+        localStorage.setItem('userInfo', JSON.stringify(data));
+      } catch (err) {
+        if (err.response?.status === 401) {
+          localStorage.removeItem('userInfo');
+          setUserInfo(null);
+        }
       } finally {
         setLoading(false);
       }

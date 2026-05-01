@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Plus, Loader2, Users } from 'lucide-react';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import Modal from '../components/common/Modal';
 import CreateProjectForm from '../components/forms/CreateProjectForm';
 import ProjectColumn from '../components/projects/ProjectColumn';
+import { listenForDataChanged } from '../appEvents';
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
@@ -18,10 +19,6 @@ export default function ProjectsPage() {
     axios.get('/api/teams').then(({ data }) => setTeams(data)).catch(() => {});
   }, []);
 
-  useEffect(() => {
-    fetchProjects();
-  }, [selectedTeam]);
-
   const fetchProjects = async () => {
     try {
       setLoading(true);
@@ -34,6 +31,18 @@ export default function ProjectsPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchProjects();
+  }, [selectedTeam]);
+
+  useEffect(() => {
+    return listenForDataChanged((event) => {
+      if (!event.detail?.type || event.detail.type === 'project') {
+        fetchProjects();
+      }
+    });
+  }, [selectedTeam]);
 
   const handleSuccess = () => {
     setIsModalOpen(false);
@@ -67,6 +76,7 @@ export default function ProjectsPage() {
               </select>
             </div>
             <button 
+              type="button"
               onClick={() => setIsModalOpen(true)}
               className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-primary rounded-xl shadow-[0_8px_16px_rgba(53,82,125,0.15)] hover:bg-[#2c4567] transition-all"
             >

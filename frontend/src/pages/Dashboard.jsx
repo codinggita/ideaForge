@@ -2,7 +2,7 @@ import React from 'react';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import Greeting from '../components/dashboard/Greeting';
 import StatsOverview from '../components/dashboard/StatsOverview';
-import RecentEvaluations from '../components/dashboard/RecentEvaluations';
+import RecentProjects from '../components/dashboard/RecentProjects';
 import TodaysTasks from '../components/dashboard/TodaysTasks';
 import AIBriefing from '../components/dashboard/AIBriefing';
 import UpcomingMeetings from '../components/dashboard/UpcomingMeetings';
@@ -15,11 +15,11 @@ export default function DashboardPage() {
       <StatsOverview />
       
       {/* Dashboard Layout Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         {/* LEFT COLUMN */}
         <div className="lg:col-span-7 space-y-8">
-          <RecentEvaluations />
+          <RecentProjects />
           <TodaysTasks />
         </div>
         

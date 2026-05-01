@@ -25,14 +25,14 @@ export default function CreateProjectForm({ onSuccess, onCancel, defaultTeam }) 
     setError(null);
 
     try {
-      await axios.post('/api/projects', {
+      const { data } = await axios.post('/api/projects', {
         title,
         description,
         status,
         priority,
         team: teamId || undefined,
       });
-      onSuccess();
+      onSuccess(data);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create project');
       setIsLoading(false);

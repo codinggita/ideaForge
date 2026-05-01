@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { ExternalLink, Calendar as CalendarIcon, Loader2 } from 'lucide-react';
+import { listenForDataChanged } from '../../appEvents';
+import { fetchMergedUpcomingEvents } from '../../calendarEvents';
 
 export default function UpcomingMeetings() {
   const [events, setEvents] = useState([]);
@@ -9,13 +10,19 @@ export default function UpcomingMeetings() {
 
   useEffect(() => {
     fetchEvents();
+    return listenForDataChanged((event) => {
+      if (!event.detail?.type || event.detail.type === 'meeting') {
+        fetchEvents();
+      }
+    });
   }, []);
 
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get('/api/calendar/upcoming');
+      const data = await fetchMergedUpcomingEvents();
       setEvents(data);
+      setError(null);
     } catch (err) {
       setError(err.response?.data?.message || err.message);
     } finally {
@@ -32,9 +39,9 @@ export default function UpcomingMeetings() {
   };
 
   return (
-    <section className="bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_20px_rgba(2,36,72,0.03)] border border-white h-full flex flex-col">
+    <section className="bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_20px_rgba(2,36,72,0.03)] border border-white">
       <div className="flex justify-between items-center mb-6">
-        <h4 className="text-sm font-bold text-primary tracking-tight">Google Calendar Events</h4>
+        <h4 className="text-sm font-bold text-primary tracking-tight">Upcoming Meetings</h4>
         <a 
           href="https://calendar.google.com" 
           target="_blank" 
@@ -46,7 +53,7 @@ export default function UpcomingMeetings() {
         </a>
       </div>
       
-      <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 -mr-2">
+      <div className="pr-2 -mr-2">
         {loading ? (
           <div className="flex justify-center py-4">
             <Loader2 className="w-5 h-5 animate-spin text-slate-400" />
@@ -54,7 +61,7 @@ export default function UpcomingMeetings() {
         ) : error ? (
           <div className="text-center text-sm text-red-500 py-4">{error}</div>
         ) : events.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full min-h-[150px]">
+          <div className="flex flex-col items-center justify-center py-8">
             <div className="text-center text-sm text-slate-500 mb-3">No upcoming events found.</div>
             <a 
               href="https://calendar.google.com" 

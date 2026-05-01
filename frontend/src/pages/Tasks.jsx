@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Plus, Loader2, CheckCircle2, Users } from 'lucide-react';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
@@ -6,6 +6,7 @@ import Modal from '../components/common/Modal';
 import CreateTaskForm from '../components/forms/CreateTaskForm';
 import TaskToolbar from '../components/tasks/TaskToolbar';
 import TaskListItem from '../components/tasks/TaskListItem';
+import { listenForDataChanged } from '../appEvents';
 
 export default function TasksPage() {
   const [tasks, setTasks] = useState([]);
@@ -19,10 +20,6 @@ export default function TasksPage() {
     axios.get('/api/teams').then(({ data }) => setTeams(data)).catch(() => {});
   }, []);
 
-  useEffect(() => {
-    fetchTasks();
-  }, [selectedTeam]);
-
   const fetchTasks = async () => {
     try {
       setLoading(true);
@@ -35,6 +32,18 @@ export default function TasksPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchTasks();
+  }, [selectedTeam]);
+
+  useEffect(() => {
+    return listenForDataChanged((event) => {
+      if (!event.detail?.type || event.detail.type === 'task') {
+        fetchTasks();
+      }
+    });
+  }, [selectedTeam]);
 
   const handleSuccess = () => {
     setIsModalOpen(false);
@@ -81,6 +90,7 @@ export default function TasksPage() {
               </select>
             </div>
             <button 
+              type="button"
               onClick={() => setIsModalOpen(true)}
               className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-secondary rounded-xl shadow-[0_8px_16px_rgba(255,107,0,0.15)] hover:bg-[#e66000] transition-all"
             >

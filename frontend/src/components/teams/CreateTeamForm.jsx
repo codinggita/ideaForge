@@ -14,8 +14,8 @@ export default function CreateTeamForm({ onSuccess, onCancel }) {
     setError('');
 
     try {
-      await axios.post('/api/teams', { name, description });
-      onSuccess();
+      const { data } = await axios.post('/api/teams', { name, description });
+      onSuccess(data);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create team');
     } finally {

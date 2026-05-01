@@ -1,23 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Loader2 } from 'lucide-react';
+import { listenForDataChanged } from '../../appEvents';
+import { fetchMergedUpcomingEvents } from '../../calendarEvents';
 
 export default function UpcomingMeetingsScroller() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const fetchUpcoming = async () => {
+    try {
+      setLoading(true);
+      const data = await fetchMergedUpcomingEvents();
+      setEvents(data);
+    } catch (error) {
+      console.error("Failed to fetch upcoming events", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchUpcoming = async () => {
-      try {
-        const { data } = await axios.get('/api/calendar/upcoming');
-        setEvents(data);
-      } catch (error) {
-        console.error("Failed to fetch upcoming events", error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchUpcoming();
+    return listenForDataChanged((event) => {
+      if (!event.detail?.type || event.detail.type === 'meeting') {
+        fetchUpcoming();
+      }
+    });
   }, []);
 
   const formatTimeRange = (startTime, endTime) => {

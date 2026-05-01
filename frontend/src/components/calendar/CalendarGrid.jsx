@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Loader2 } from 'lucide-react';
+import { listenForDataChanged } from '../../appEvents';
+import { fetchMergedMonthEvents } from '../../calendarEvents';
 
 export default function CalendarGrid() {
   const [events, setEvents] = useState([]);
@@ -9,29 +10,35 @@ export default function CalendarGrid() {
 
   const [currentDate, setCurrentDate] = useState(new Date());
 
+  const fetchMonthEvents = async () => {
+    try {
+      setLoading(true);
+      const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+      const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0, 23, 59, 59);
+
+      const data = await fetchMergedMonthEvents({
+        timeMin: firstDay.toISOString(),
+        timeMax: lastDay.toISOString(),
+      });
+      setEvents(data);
+      setError(null);
+    } catch (err) {
+      setError(err.response?.data?.message || err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchMonthEvents = async () => {
-      try {
-        setLoading(true);
-        // We'll calculate the timeMin and timeMax for the currently viewed month
-        const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-        const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0, 23, 59, 59);
-        
-        const { data } = await axios.get('/api/calendar/month', {
-          params: {
-            timeMin: firstDay.toISOString(),
-            timeMax: lastDay.toISOString()
-          }
-        });
-        setEvents(data);
-      } catch (err) {
-        setError(err.response?.data?.message || err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
     fetchMonthEvents();
+  }, [currentDate]);
+
+  useEffect(() => {
+    return listenForDataChanged((event) => {
+      if (!event.detail?.type || event.detail.type === 'meeting') {
+        fetchMonthEvents();
+      }
+    });
   }, [currentDate]);
 
   // Calendar Math
@@ -138,6 +145,11 @@ export default function CalendarGrid() {
         {loading && (
           <div className="absolute inset-0 bg-white/50 backdrop-blur-sm z-20 flex items-center justify-center">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        )}
+        {error && !loading && (
+          <div className="absolute inset-x-4 top-4 z-20 rounded-lg border border-red-100 bg-red-50 px-4 py-2 text-sm text-red-600">
+            {error}
           </div>
         )}
         

@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import Project from '../models/projectModel.js';
 import Task from '../models/taskModel.js';
+import Meeting from '../models/meetingModel.js';
 import { google } from 'googleapis';
 import User from '../models/userModel.js';
 
@@ -35,8 +36,13 @@ const getDashboardStats = asyncHandler(async (req, res) => {
     healthScore = Math.round((completedTasks / totalTasks) * 100);
   }
 
-  // 3. Fetch Google Calendar Meetings for Today
-  let meetingsToday = 0;
+  // 3. Fetch Local + Google Calendar Meetings for Today
+  const localMeetingsToday = await Meeting.countDocuments({
+    user: userId,
+    startTime: { $gte: today, $lt: tomorrow },
+  });
+
+  let meetingsToday = localMeetingsToday;
   try {
     const user = await User.findById(userId);
     if (user && user.googleAccessToken) {
@@ -65,7 +71,7 @@ const getDashboardStats = asyncHandler(async (req, res) => {
         singleEvents: true,
       });
 
-      meetingsToday = response.data.items ? response.data.items.length : 0;
+      meetingsToday += response.data.items ? response.data.items.length : 0;
     }
   } catch (error) {
     console.error('Failed to fetch calendar for stats:', error.message);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-export default function Sidebar() {
+export default function Sidebar({ onQuickAction }) {
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -53,7 +53,11 @@ export default function Sidebar() {
       </nav>
 
       <div className="mt-auto space-y-1 pt-6 border-t border-white/10">
-        <button className="w-full mb-4 py-2.5 bg-secondary text-white rounded-lg text-sm font-semibold flex items-center justify-center gap-2 active:scale-95 transition-transform">
+        <button
+          type="button"
+          onClick={onQuickAction}
+          className="w-full mb-4 py-2.5 bg-secondary text-white rounded-lg text-sm font-semibold flex items-center justify-center gap-2 active:scale-95 transition-transform"
+        >
           <span className="material-symbols-outlined text-[18px]">bolt</span>
           <span>Quick Action</span>
         </button>

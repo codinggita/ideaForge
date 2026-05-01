@@ -35,13 +35,13 @@ export default function CreateTaskForm({ onSuccess, onCancel, defaultTeam }) {
     setError(null);
 
     try {
-      await axios.post('/api/tasks', {
+      const { data } = await axios.post('/api/tasks', {
         title,
         dueDate: dueDate || undefined,
         team: teamId || undefined,
         assignedTo: assignedTo || undefined,
       });
-      onSuccess();
+      onSuccess(data);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create task');
       setIsLoading(false);

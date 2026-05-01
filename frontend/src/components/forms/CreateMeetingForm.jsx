@@ -30,7 +30,7 @@ export default function CreateMeetingForm({ onSuccess, onCancel }) {
         throw new Error('End time must be after start time');
       }
 
-      await axios.post('/api/meetings', {
+      const { data } = await axios.post('/api/meetings', {
         title,
         description,
         startTime: startDateTime.toISOString(),
@@ -38,7 +38,7 @@ export default function CreateMeetingForm({ onSuccess, onCancel }) {
         type,
         meetingLink: meetingLink || undefined
       });
-      onSuccess();
+      onSuccess(data);
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Failed to schedule meeting');
       setIsLoading(false);

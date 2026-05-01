@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
 export default function ProfileForm({ userInfo, updateProfile }) {
@@ -6,6 +6,11 @@ export default function ProfileForm({ userInfo, updateProfile }) {
   const [jobTitle, setJobTitle] = useState(userInfo?.jobTitle || '');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    setName(userInfo?.name || '');
+    setJobTitle(userInfo?.jobTitle || '');
+  }, [userInfo?.name, userInfo?.jobTitle]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

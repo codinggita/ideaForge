@@ -19,6 +19,8 @@ const authUser = asyncHandler(async (req, res) => {
       email: user.email,
       role: user.role,
       jobTitle: user.jobTitle,
+      hasPassword: Boolean(user.password),
+      googleConnected: Boolean(user.googleId),
     });
   } else {
     res.status(401);
@@ -54,6 +56,8 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       role: user.role,
       jobTitle: user.jobTitle,
+      hasPassword: Boolean(user.password),
+      googleConnected: Boolean(user.googleId),
     });
   } else {
     res.status(400);
@@ -85,6 +89,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
       email: user.email,
       role: user.role,
       jobTitle: user.jobTitle,
+      hasPassword: Boolean(user.password),
+      googleConnected: Boolean(user.googleId),
     });
   } else {
     res.status(404);
@@ -103,6 +109,24 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.jobTitle = req.body.jobTitle !== undefined ? req.body.jobTitle : user.jobTitle;
     
     if (req.body.password) {
+      if (req.body.password.length < 6) {
+        res.status(400);
+        throw new Error('Password must be at least 6 characters long');
+      }
+
+      if (user.password) {
+        if (!req.body.currentPassword) {
+          res.status(400);
+          throw new Error('Current password is required');
+        }
+
+        const isPasswordValid = await user.matchPassword(req.body.currentPassword);
+        if (!isPasswordValid) {
+          res.status(401);
+          throw new Error('Current password is incorrect');
+        }
+      }
+
       user.password = req.body.password;
     }
 
@@ -114,6 +138,8 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       email: updatedUser.email,
       role: updatedUser.role,
       jobTitle: updatedUser.jobTitle,
+      hasPassword: Boolean(updatedUser.password),
+      googleConnected: Boolean(updatedUser.googleId),
     });
   } else {
     res.status(404);

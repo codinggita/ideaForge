@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 
 export default function AIBriefing() {
@@ -29,7 +30,7 @@ export default function AIBriefing() {
         </div>
         
         {loading ? (
-          <div className="flex items-center gap-2 text-sm text-white/70 h-[56px]">
+          <div className="flex items-center gap-2 text-sm text-white/70 py-4">
             <Loader2 className="w-4 h-4 animate-spin" /> Analyzing your workspace...
           </div>
         ) : stats ? (
@@ -46,9 +47,9 @@ export default function AIBriefing() {
           <span className="text-[10px] text-on-primary-container font-medium">
             Last updated: {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </span>
-          <button className="text-xs font-bold text-secondary-container flex items-center gap-1 group">
+          <Link to="/tasks" className="text-xs font-bold text-secondary-container flex items-center gap-1 group">
             Take Action <span className="material-symbols-outlined text-xs group-hover:translate-x-1 transition-transform">arrow_forward</span>
-          </button>
+          </Link>
         </div>
       </div>
       {/* Abstract Background Texture */}

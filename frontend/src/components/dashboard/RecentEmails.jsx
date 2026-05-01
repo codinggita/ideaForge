@@ -34,7 +34,7 @@ export default function RecentEmails() {
   };
 
   return (
-    <section className="bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_20px_rgba(2,36,72,0.03)] border border-white h-full flex flex-col">
+    <section className="bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_20px_rgba(2,36,72,0.03)] border border-white">
       <div className="flex justify-between items-center mb-6">
         <h4 className="text-sm font-bold text-primary tracking-tight">Recent Emails</h4>
         <a href="https://mail.google.com" target="_blank" rel="noreferrer" className="text-[10px] font-bold text-secondary uppercase tracking-widest flex items-center gap-1 hover:underline">
@@ -42,7 +42,7 @@ export default function RecentEmails() {
         </a>
       </div>
       
-      <div className="flex-1 space-y-5 overflow-y-auto custom-scrollbar">
+      <div className="space-y-5">
         {loading ? (
           <div className="flex justify-center py-4">
             <Loader2 className="w-5 h-5 animate-spin text-slate-400" />

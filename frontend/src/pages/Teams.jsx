@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Plus, Loader2, Users } from 'lucide-react';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
@@ -6,6 +6,7 @@ import Modal from '../components/common/Modal';
 import TeamCard from '../components/teams/TeamCard';
 import TeamDetailPanel from '../components/teams/TeamDetailPanel';
 import CreateTeamForm from '../components/teams/CreateTeamForm';
+import { listenForDataChanged } from '../appEvents';
 
 export default function TeamsPage() {
   const [teams, setTeams] = useState([]);
@@ -16,6 +17,14 @@ export default function TeamsPage() {
 
   useEffect(() => {
     fetchTeams();
+  }, []);
+
+  useEffect(() => {
+    return listenForDataChanged((event) => {
+      if (!event.detail?.type || event.detail.type === 'team') {
+        fetchTeams();
+      }
+    });
   }, []);
 
   const fetchTeams = async () => {
@@ -53,6 +62,7 @@ export default function TeamsPage() {
             <p className="text-sm text-slate-500 mt-1">Create teams and collaborate with your colleagues</p>
           </div>
           <button
+            type="button"
             onClick={() => setIsModalOpen(true)}
             className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-primary rounded-xl shadow-[0_8px_16px_rgba(53,82,125,0.15)] hover:bg-[#2c4567] transition-all"
           >
@@ -77,6 +87,7 @@ export default function TeamsPage() {
               <p className="text-sm text-slate-400 mt-1">Create your first team to start collaborating</p>
             </div>
             <button
+              type="button"
               onClick={() => setIsModalOpen(true)}
               className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-secondary rounded-xl shadow-[0_8px_16px_rgba(255,107,0,0.15)] hover:bg-[#e66000] transition-all"
             >

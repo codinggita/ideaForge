@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Loader2 } from 'lucide-react';
+import { listenForDataChanged } from '../../appEvents';
 
 export default function StatsOverview() {
   const [stats, setStats] = useState({
@@ -11,25 +12,32 @@ export default function StatsOverview() {
   });
   const [loading, setLoading] = useState(true);
 
+  const fetchStats = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get('/api/dashboard/stats');
+      setStats(data);
+    } catch (error) {
+      console.error("Failed to fetch stats", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const { data } = await axios.get('/api/dashboard/stats');
-        setStats(data);
-      } catch (error) {
-        console.error("Failed to fetch stats", error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchStats();
+    return listenForDataChanged((event) => {
+      if (['project', 'task', 'team', 'meeting'].includes(event.detail?.type)) {
+        fetchStats();
+      }
+    });
   }, []);
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 items-start">
         {[1, 2, 3, 4].map(i => (
-          <div key={i} className="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_20px_rgba(2,36,72,0.03)] border border-white h-[120px] flex items-center justify-center">
+          <div key={i} className="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_20px_rgba(2,36,72,0.03)] border border-white flex items-center justify-center">
             <Loader2 className="w-6 h-6 animate-spin text-slate-300" />
           </div>
         ))}
@@ -38,9 +46,9 @@ export default function StatsOverview() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 items-start">
       {/* Stat 1 */}
-      <div className="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_20px_rgba(2,36,72,0.03)] border border-white">
+      <div className="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_20px_rgba(2,36,72,0.03)] border border-white flex flex-col justify-between">
         <div className="flex justify-between items-start mb-4">
           <p className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Active Projects</p>
           <span className="material-symbols-outlined text-secondary text-xl">tactic</span>
@@ -63,7 +71,7 @@ export default function StatsOverview() {
       </div>
 
       {/* Stat 2 */}
-      <div className="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_20px_rgba(2,36,72,0.03)] border border-white">
+      <div className="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_20px_rgba(2,36,72,0.03)] border border-white flex flex-col justify-between">
         <div className="flex justify-between items-start mb-4">
           <p className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Tasks Due Today</p>
           <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white ${stats.tasksDueToday > 0 ? 'bg-error' : 'bg-green-500'}`}>
@@ -84,7 +92,7 @@ export default function StatsOverview() {
       </div>
 
       {/* Stat 3 */}
-      <div className="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_20px_rgba(2,36,72,0.03)] border border-white">
+      <div className="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_20px_rgba(2,36,72,0.03)] border border-white flex flex-col justify-between">
         <div className="flex justify-between items-start mb-4">
           <p className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Meetings Today</p>
           <span className="material-symbols-outlined text-on-surface-variant text-xl">event</span>
@@ -102,7 +110,7 @@ export default function StatsOverview() {
       </div>
 
       {/* Stat 4 */}
-      <div className="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_20px_rgba(2,36,72,0.03)] border border-white">
+      <div className="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_20px_rgba(2,36,72,0.03)] border border-white flex flex-col justify-between">
         <div className="flex justify-between items-start mb-4">
           <p className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Task Health</p>
           <span className="material-symbols-outlined text-green-600 text-xl">verified</span>

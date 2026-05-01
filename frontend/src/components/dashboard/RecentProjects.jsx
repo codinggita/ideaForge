@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Plus } from 'lucide-react';
 import Modal from '../common/Modal';
 import CreateProjectForm from '../forms/CreateProjectForm';
+import { listenForDataChanged } from '../../appEvents';
 
-export default function RecentEvaluations() {
+export default function RecentProjects() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    fetchProjects();
-  }, []);
-
-  const fetchProjects = async () => {
+  async function fetchProjects() {
     try {
       setLoading(true);
       const { data } = await axios.get('/api/projects');
@@ -25,7 +22,16 @@ export default function RecentEvaluations() {
     } finally {
       setLoading(false);
     }
-  };
+  }
+
+  useEffect(() => {
+    fetchProjects();
+    return listenForDataChanged((event) => {
+      if (!event.detail?.type || event.detail.type === 'project') {
+        fetchProjects();
+      }
+    });
+  }, []);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -52,18 +58,19 @@ export default function RecentEvaluations() {
 
   return (
     <>
-      <section className="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(2,36,72,0.03)] h-full flex flex-col">
+      <section className="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(2,36,72,0.03)]">
         <div className="px-6 py-5 border-b border-slate-50 flex justify-between items-center">
           <h4 className="text-sm font-bold text-primary tracking-tight">Recent Projects</h4>
           <div className="flex items-center gap-3">
             <button 
+              type="button"
               onClick={() => setIsModalOpen(true)}
               className="p-1.5 bg-primary/5 hover:bg-primary/10 text-primary rounded-lg transition-colors"
               title="Create New Project"
             >
               <Plus className="w-4 h-4" />
             </button>
-            <button className="text-xs font-bold text-secondary uppercase tracking-widest">View All</button>
+            <Link to="/projects" className="text-xs font-bold text-secondary uppercase tracking-widest">View All</Link>
           </div>
         </div>
         <div className="divide-y divide-slate-50 flex-1">
@@ -72,9 +79,10 @@ export default function RecentEvaluations() {
           ) : error ? (
             <div className="p-6 text-center text-sm text-red-500">{error}</div>
           ) : projects.length === 0 ? (
-            <div className="p-6 text-center flex flex-col items-center justify-center h-full min-h-[150px]">
+            <div className="p-6 text-center flex flex-col items-center justify-center">
               <p className="text-sm text-slate-500 mb-3">No projects found.</p>
               <button 
+                type="button"
                 onClick={() => setIsModalOpen(true)}
                 className="text-xs font-semibold text-primary bg-[#eef2f4] hover:bg-[#e2e8f0] px-4 py-2 rounded-lg transition-colors"
               >

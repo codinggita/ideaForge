@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function CalendarHeader() {
+export default function CalendarHeader({ onNewMeeting }) {
   return (
     <header className="flex justify-between items-center w-full px-8 py-4 bg-[#F7F9FB] sticky top-0 z-40 border-b border-slate-100">
       <div className="flex items-center gap-8">
@@ -25,7 +25,11 @@ export default function CalendarHeader() {
           </span>
         </div>
         
-        <button className="bg-primary text-white px-4 sm:px-6 py-2 rounded-lg text-sm font-medium flex items-center gap-2 active:scale-95 transition-all">
+        <button
+          type="button"
+          onClick={onNewMeeting}
+          className="bg-primary text-white px-4 sm:px-6 py-2 rounded-lg text-sm font-medium flex items-center gap-2 active:scale-95 transition-all"
+        >
           <span className="material-symbols-outlined text-[18px]" data-icon="videocam">videocam</span>
           <span className="hidden sm:inline">+ New Meeting</span>
           <span className="sm:hidden">New</span>
