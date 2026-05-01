@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
+import { getUserAvatar } from '../../avatar';
 
 export default function CalendarHeader({ onNewMeeting }) {
+  const { userInfo } = useContext(AuthContext);
+
   return (
     <header className="flex justify-between items-center w-full px-8 py-4 bg-[#F7F9FB] sticky top-0 z-40 border-b border-slate-100">
       <div className="flex items-center gap-8">
@@ -37,9 +41,9 @@ export default function CalendarHeader({ onNewMeeting }) {
         
         <div className="flex items-center gap-2 group cursor-pointer border-l border-slate-200 pl-6">
           <img 
-            alt="User Profile" 
-            className="w-10 h-10 rounded-full border-2 border-white shadow-sm" 
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC4zSHhhhVdTNfTki25m097S5zujC3ZgV2441089r54rA_REWe5Y73odrN591vcFy-vAMWNZYNog4DnNLZHnSvF_jvlGERKP0IQaORej-0WVev44Uj4AdZtv3VV9de1iu1SRA_nTEqm5MWjQVShuYaNawvFkuFuN4YEfvLO6AKgPW05AJvucCQJ0fMHQ-PwcEzseLrihg40dXkAQAKXFfIIKAnsGieil2cN3nyeYvgbGujBEZuIctbBYZSHDZy-lnYlxyvm7FBR3U"
+            alt={userInfo?.name || userInfo?.email || 'User avatar'}
+            className="w-10 h-10 rounded-full border-2 border-white shadow-sm object-cover bg-slate-200"
+            src={getUserAvatar(userInfo)}
           />
         </div>
       </div>

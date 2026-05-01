@@ -1,10 +1,14 @@
 import React, { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import api from '../services/api';
+import { setAuthenticated } from '../store/slices/authSlice';
+import { clearUserProfile, setUserProfile } from '../store/slices/userSlice';
 
 // Create Context
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const dispatch = useDispatch();
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,19 +22,25 @@ export const AuthProvider = ({ children }) => {
         storedUser = localStorage.getItem('userInfo');
         if (storedUser) {
           setUserInfo(JSON.parse(storedUser));
+          dispatch(setUserProfile(JSON.parse(storedUser)));
+          dispatch(setAuthenticated(true));
         }
       } catch (err) {
         console.error('Failed to parse user info', err);
       }
 
       try {
-        const { data } = await axios.get('/api/users/profile');
+        const { data } = await api.get('/users/profile');
         setUserInfo(data);
+        dispatch(setUserProfile(data));
+        dispatch(setAuthenticated(true));
         localStorage.setItem('userInfo', JSON.stringify(data));
       } catch (err) {
         if (err.response?.status === 401) {
           localStorage.removeItem('userInfo');
           setUserInfo(null);
+          dispatch(clearUserProfile());
+          dispatch(setAuthenticated(false));
         }
       } finally {
         setLoading(false);
@@ -48,9 +58,11 @@ export const AuthProvider = ({ children }) => {
         headers: { 'Content-Type': 'application/json' },
       };
 
-      const { data } = await axios.post('/api/users/login', { email, password }, config);
+      const { data } = await api.post('/users/login', { email, password }, config);
       
       setUserInfo(data);
+      dispatch(setUserProfile(data));
+      dispatch(setAuthenticated(true));
       localStorage.setItem('userInfo', JSON.stringify(data));
       return data;
     } catch (err) {
@@ -73,9 +85,11 @@ export const AuthProvider = ({ children }) => {
         headers: { 'Content-Type': 'application/json' },
       };
 
-      const { data } = await axios.post('/api/users', { name, email, password }, config);
+      const { data } = await api.post('/users', { name, email, password }, config);
       
       setUserInfo(data);
+      dispatch(setUserProfile(data));
+      dispatch(setAuthenticated(true));
       localStorage.setItem('userInfo', JSON.stringify(data));
       return data;
     } catch (err) {
@@ -92,12 +106,15 @@ export const AuthProvider = ({ children }) => {
   // Logout Function
   const logout = async () => {
     try {
-      await axios.post('/api/users/logout');
+      await api.post('/users/logout');
     } catch (err) {
       console.error('Logout failed', err);
     } finally {
       localStorage.removeItem('userInfo');
+      sessionStorage.clear();
       setUserInfo(null);
+      dispatch(clearUserProfile());
+      dispatch(setAuthenticated(false));
     }
   };
 
@@ -110,9 +127,10 @@ export const AuthProvider = ({ children }) => {
         headers: { 'Content-Type': 'application/json' },
       };
 
-      const { data } = await axios.put('/api/users/profile', userData, config);
+      const { data } = await api.put('/users/profile', userData, config);
       
       setUserInfo(data);
+      dispatch(setUserProfile(data));
       localStorage.setItem('userInfo', JSON.stringify(data));
       return data;
     } catch (err) {
