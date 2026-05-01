@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: ideaforge
+    name: crmideaforge
     env: node
     plan: free
     buildCommand: cd backend && npm install && cd ../frontend && npm install && npm run build
