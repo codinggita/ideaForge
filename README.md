@@ -6,11 +6,11 @@ IdeaForge is a full-stack MERN SaaS productivity workspace for managing projects
 
 | Resource | Link |
 | --- | --- |
-| Figma Design | Add Figma link here |
+| Figma Design | https://www.figma.com/design/iUslU2uk6IbPU48cxKlJkL/KHUSH-PATEL-s-team-library?node-id=0-1&t=NMUYd8hYekwe11vh-1 |
 | Live Deployed Project | https://crmideaforge.onrender.com |
 | Backend Deployed API | https://crmideaforge.onrender.com/api |
 | Postman Documentation | https://documenter.getpostman.com/view/50839203/2sBXqKoKkY |
-| YouTube Demo | Add YouTube demo link here |
+| YouTube Demo | https://youtu.be/lJTuWU8b9Tg |
 | Personal GitHub Repository | https://github.com/khushpatel143/ideaForge |
 | Official Coding Gita Repository | https://github.com/codinggita/ideaForge |
 | Assignment Checklist | https://github.com/codinggita/CGxSU_Semester_1/blob/main/assignments/04.sem2_full_stack_60_Marks_Project_01/01.features_checklist.md |
