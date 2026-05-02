@@ -4,16 +4,11 @@ IdeaForge is a full-stack MERN SaaS productivity workspace for managing projects
 
 ## Important Links
 
-| Resource | Link |
-| --- | --- |
-| Figma Design | https://www.figma.com/design/iUslU2uk6IbPU48cxKlJkL/KHUSH-PATEL-s-team-library?node-id=0-1&t=NMUYd8hYekwe11vh-1 |
-| Live Deployed Project | https://crmideaforge.onrender.com |
-| Backend Deployed API | https://crmideaforge.onrender.com/api |
-| Postman Documentation | https://documenter.getpostman.com/view/50839203/2sBXqKoKkY |
-| YouTube Demo | https://youtu.be/lJTuWU8b9Tg |
-| Personal GitHub Repository | https://github.com/khushpatel143/ideaForge |
-| Official Coding Gita Repository | https://github.com/codinggita/ideaForge |
-| Assignment Checklist | https://github.com/codinggita/CGxSU_Semester_1/blob/main/assignments/04.sem2_full_stack_60_Marks_Project_01/01.features_checklist.md |
+| Live | API | Postman | Demo | Figma |
+| --- | --- | --- | --- | --- |
+| [Project](https://crmideaforge.onrender.com) | [Backend](https://crmideaforge.onrender.com/api) | [Docs](https://documenter.getpostman.com/view/50839203/2sBXqKoKkY) | [YouTube](https://youtu.be/lJTuWU8b9Tg) | [Design](https://www.figma.com/design/iUslU2uk6IbPU48cxKlJkL/KHUSH-PATEL-s-team-library?node-id=0-1&t=NMUYd8hYekwe11vh-1) |
+
+Repositories: [Personal Fork](https://github.com/khushpatel143/ideaForge) | [Official Coding Gita Repository](https://github.com/codinggita/ideaForge)
 
 ## Problem Statement
 
@@ -27,62 +22,22 @@ The platform is built with a production-ready MERN architecture, deployed on Ren
 
 ## Features
 
-- Landing page with modern SaaS-style UI.
-- Email/password authentication with HTTP-only JWT cookies.
-- Google OAuth authentication.
-- User profile, security, notifications, and billing-readiness settings.
-- Dashboard with stats, recent projects, today's tasks, meetings, Gmail preview, and AI-style briefing.
-- Project CRUD with personal and team-scoped project access.
-- Task CRUD with due dates, completion updates, project linking, team linking, and assignment support.
-- Team collaboration with owner, admin, and member roles.
-- Team member add, remove, and role update workflows.
-- Local meeting CRUD with Calendar page integration.
-- Google Calendar integration for upcoming and monthly events.
-- Gmail integration for recent email preview.
-- Notification inbox with read and read-all actions.
-- Global search across application data.
-- Reports dashboard with custom analytics and canvas charts.
-- Quick Action modal for creating project, task, team, or meeting from anywhere.
-- Protected routes and session-aware navigation.
-- Responsive frontend design for desktop and mobile.
-- SEO support using dynamic meta tags, Open Graph tags, sitemap, and robots file.
-- API documentation published with Postman.
+- Authentication with email/password, HTTP-only JWT cookies, protected routes, and Google OAuth.
+- Dashboard with live stats, recent projects, tasks, meetings, Gmail preview, notifications, and AI-style briefing.
+- Project, task, team, and meeting CRUD with personal/team access control.
+- Team collaboration with owner/admin/member roles, member invitations, role updates, and notifications.
+- Google Calendar and Gmail integrations through OAuth.
+- Reports, analytics, global search, quick actions, settings, and responsive UI.
+- SEO implementation with React Helmet, dynamic metadata, Open Graph, Twitter cards, sitemap, robots, schema.org, and Postman API documentation.
 
 ## Tech Stack
 
-### Frontend
-
-- React.js
-- Vite
-- React Router
-- Tailwind CSS
-- Material UI
-- Redux Toolkit
-- Formik and Yup
-- Axios
-- React Helmet Async
-- Framer Motion
-- Lucide React
-
-### Backend
-
-- Node.js
-- Express.js
-- MongoDB Atlas
-- Mongoose
-- JWT authentication
-- HTTP-only cookies
-- bcryptjs
-- Google APIs
-
-### Tools and Deployment
-
-- Render
-- MongoDB Compass
-- Postman
-- GitHub
-- Google Cloud Console
-- Figma
+| Area | Technologies |
+| --- | --- |
+| Frontend | React, Vite, React Router, Tailwind CSS, Material UI, Redux Toolkit, Formik, Yup, Axios, React Helmet Async |
+| Backend | Node.js, Express.js, MongoDB Atlas, Mongoose, JWT, HTTP-only cookies, bcryptjs |
+| Integrations | Google OAuth, Gmail API, Google Calendar API |
+| Tools | Render, Postman, MongoDB Compass, GitHub, Google Cloud Console, Figma |
 
 ## Folder Structure
 
