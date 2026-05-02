@@ -1,182 +1,88 @@
 # IdeaForge
 
-IdeaForge is a MERN stack SaaS workspace for startup and team operations. It combines authentication, project planning, task execution, team collaboration, meetings, notifications, Google productivity integrations, reporting, global search, SEO, and deployment-ready configuration in one full-stack product.
+IdeaForge is a full-stack MERN SaaS productivity workspace for managing projects, tasks, teams, meetings, notifications, analytics, reports, global search, and Google productivity integrations from one deployed application.
 
-This project was built as a Semester 2 full-stack project and is organized so evaluators can quickly verify the required frontend, backend, UI/UX, SEO, storage, and deployment criteria.
+## Important Links
 
-## Live Deployment Recommendation
+| Resource | Link |
+| --- | --- |
+| Figma Design | https://www.figma.com/design/iUslU2uk6IbPU48cxKlJkL/KHUSH-PATEL-s-team-library?node-id=0-1&t=NMUYd8hYekwe11vh-1 |
+| Live Deployed Project | https://crmideaforge.onrender.com |
+| Backend Deployed API | https://crmideaforge.onrender.com/api |
+| Postman Documentation | https://documenter.getpostman.com/view/50839203/2sBXqKoKkY |
+| YouTube Demo | https://youtu.be/lJTuWU8b9Tg |
+| Personal GitHub Repository | https://github.com/khushpatel143/ideaForge |
+| Official Coding Gita Repository | https://github.com/codinggita/ideaForge |
+| Assignment Checklist | https://github.com/codinggita/CGxSU_Semester_1/blob/main/assignments/04.sem2_full_stack_60_Marks_Project_01/01.features_checklist.md |
 
-Recommended deployment path: Render Web Service + MongoDB Atlas.
+## Problem Statement
 
-Why Render is the cleanest option for this repo:
-- The backend can serve the built Vite frontend from `frontend/dist`.
-- The included [render.yaml](/D:/PROJECTS/IdeaForge/render.yaml) builds both apps and starts the Express server.
-- `/api/*` and React routes work from the same domain, so CORS and production API URLs stay simple.
+Startup teams and student project teams often manage ideas, tasks, meetings, project updates, team members, and productivity tools across disconnected platforms. This creates scattered communication, unclear task ownership, weak visibility, and difficulty tracking progress from idea to execution.
 
-Good alternative:
-- Frontend on Vercel, backend on Render, database on MongoDB Atlas.
-- Use `VITE_API_BASE_URL=https://your-backend.onrender.com/api` in the frontend environment.
+## Solution
+
+IdeaForge solves this by providing a single SaaS-style workspace where users can authenticate, manage projects, create and assign tasks, collaborate in teams, schedule meetings, track dashboard analytics, view reports, search globally, receive notifications, and connect Google services such as OAuth, Gmail, and Calendar.
+
+The platform is built with a production-ready MERN architecture, deployed on Render, connected to MongoDB Atlas, and documented with Postman for API evaluation.
+
+## Features
+
+- Landing page with modern SaaS-style UI.
+- Email/password authentication with HTTP-only JWT cookies.
+- Google OAuth authentication.
+- User profile, security, notifications, and billing-readiness settings.
+- Dashboard with stats, recent projects, today's tasks, meetings, Gmail preview, and AI-style briefing.
+- Project CRUD with personal and team-scoped project access.
+- Task CRUD with due dates, completion updates, project linking, team linking, and assignment support.
+- Team collaboration with owner, admin, and member roles.
+- Team member add, remove, and role update workflows.
+- Local meeting CRUD with Calendar page integration.
+- Google Calendar integration for upcoming and monthly events.
+- Gmail integration for recent email preview.
+- Notification inbox with read and read-all actions.
+- Global search across application data.
+- Reports dashboard with custom analytics and canvas charts.
+- Quick Action modal for creating project, task, team, or meeting from anywhere.
+- Protected routes and session-aware navigation.
+- Responsive frontend design for desktop and mobile.
+- SEO support using dynamic meta tags, Open Graph tags, sitemap, and robots file.
+- API documentation published with Postman.
 
 ## Tech Stack
 
-- Frontend: React 18, Vite, Tailwind CSS, MUI, Redux Toolkit, React Router, React Helmet Async, Formik, Yup, Axios, Framer Motion, Lucide React
-- Backend: Node.js, Express.js, MongoDB, Mongoose, JWT, bcryptjs, cookie-parser
-- Integrations: Google OAuth, Gmail API, Google Calendar API
-- Deployment: Render-ready monorepo setup with production static serving
+### Frontend
 
-## Core Features
+- React.js
+- Vite
+- React Router
+- Tailwind CSS
+- Material UI
+- Redux Toolkit
+- Formik and Yup
+- Axios
+- React Helmet Async
+- Framer Motion
+- Lucide React
 
-- Authentication with JWT cookies, email/password login, registration, logout, and Google OAuth.
-- Email-based avatar system using Google profile picture when available and generated fallback avatars from account identity.
-- Protected dashboard routes and role-aware route guard structure.
-- Dashboard overview with live stats, AI-style briefing, recent projects, today's tasks, upcoming meetings, and recent Gmail messages.
-- Project management with personal/team projects and status columns: Planning, Active, Completed.
-- Task management with personal/team filtering, assignments, due dates, optimistic completion updates, and notifications.
-- Team management with owner/admin/member roles, email-based member invitations, role updates, and removal controls.
-- Calendar and meetings with Google Calendar event sync plus local meeting creation using a Formik/Yup dynamic attendee form.
-- Global search across projects, tasks, and teams with debounced search and session storage.
-- Reports dashboard with custom canvas charts and workspace analytics.
-- Notification bell with unread state, mark-as-read actions, and preferences UI.
-- Settings area with Profile, Security, Notifications, and Billing-readiness tabs.
-- Quick Action modal for creating tasks, projects, teams, and meetings from anywhere.
-- SEO metadata, Open Graph tags, structured data, sitemap, and robots file.
-- Local/session storage for auth profile cache, theme, notification preferences, page tracking, and temporary search state.
+### Backend
 
-## Assignment Checklist Coverage
+- Node.js
+- Express.js
+- MongoDB Atlas
+- Mongoose
+- JWT authentication
+- HTTP-only cookies
+- bcryptjs
+- Google APIs
 
-The project follows the required checklist from:
-https://github.com/codinggita/CGxSU_Semester_1/blob/main/assignments/04.sem2_full_stack_60_Marks_Project_01/01.features_checklist.md
+### Tools and Deployment
 
-### 0. Design Approval
-
-- Figma design was completed before implementation.
-- Major screens are represented: landing, login, dashboard, projects, tasks, calendar, teams, reports, settings.
-- A consistent visual system is used across colors, typography, spacing, cards, buttons, modals, forms, sidebar, and navigation.
-
-### 1. Project Setup and Structure
-
-- Vite React app is used in `frontend/`.
-- Tailwind CSS is configured in [tailwind.config.js](/D:/PROJECTS/IdeaForge/frontend/tailwind.config.js).
-- MUI is integrated through [AppThemeProvider.jsx](/D:/PROJECTS/IdeaForge/frontend/src/components/theme/AppThemeProvider.jsx).
-- Clean structure exists: `components`, `pages`, `hooks`, `services`, `store`, `utils`.
-- Reusable components include Modal, QuickActionModal, ProtectedRoute, SEO, ToastHost, forms, cards, team panels, and dashboard widgets.
-
-### 2. Routing System
-
-- React Router is implemented in [App.jsx](/D:/PROJECTS/IdeaForge/frontend/src/App.jsx).
-- Public routes: `/`, `/login`.
-- Protected routes: `/dashboard`, `/projects`, `/tasks`, `/calendar`, `/teams`, `/reports`, `/settings`.
-- Route guard: [ProtectedRoute.jsx](/D:/PROJECTS/IdeaForge/frontend/src/components/common/ProtectedRoute.jsx).
-- Lazy loading and Suspense are used for route-level code splitting.
-
-### 3. State Management
-
-- Redux Toolkit store is configured in [store/index.js](/D:/PROJECTS/IdeaForge/frontend/src/store/index.js).
-- Slices are included for auth, user, and UI state.
-- AuthContext remains for existing auth workflow, while Redux mirrors authenticated user and UI state.
-
-### 4. API Integration
-
-- Central Axios service is implemented in [services/api.js](/D:/PROJECTS/IdeaForge/frontend/src/services/api.js).
-- Request interceptor adds session context.
-- Response interceptor includes a retry fallback for transient failures.
-- Loading, error, and empty states are present throughout dashboard, projects, tasks, teams, reports, calendar, and settings.
-
-### 5. Forms and Validation
-
-- Formik and Yup are integrated in [CreateMeetingForm.jsx](/D:/PROJECTS/IdeaForge/frontend/src/components/forms/CreateMeetingForm.jsx).
-- Dynamic attendee fields make this a complex dynamic form.
-- Other CRUD forms include CreateProjectForm, CreateTaskForm, CreateTeamForm, ProfileForm, and SecurityForm.
-
-### 6. UI/UX Design
-
-- Responsive layouts are implemented with Tailwind breakpoints.
-- Core components included: navbar/topbar, sidebar, cards, modals, buttons, inputs, forms, and dashboard panels.
-- Empty and error states are implemented across major data views.
-- Quick Action improves workflow speed by letting users create core records from any dashboard page.
-
-### 7. Theme System
-
-- Light/dark preference is stored in localStorage.
-- MUI theme and Tailwind dark class are synchronized through [useTheme.js](/D:/PROJECTS/IdeaForge/frontend/src/hooks/useTheme.js).
-- Theme toggle is available in the dashboard topbar.
-
-### 8. Performance Optimization
-
-- Route-level lazy loading is implemented.
-- Large bundle warning was removed after route splitting.
-- Debounced search avoids unnecessary API calls.
-- Canvas charts avoid extra chart dependencies.
-
-### 9. SEO Implementation
-
-- React Helmet Async is used through [SEO.jsx](/D:/PROJECTS/IdeaForge/frontend/src/components/common/SEO.jsx) and [RouteSEO.jsx](/D:/PROJECTS/IdeaForge/frontend/src/components/common/RouteSEO.jsx).
-- Dynamic page titles and meta descriptions are configured per route.
-- Open Graph and Twitter card tags are included.
-- Structured data uses schema.org `SoftwareApplication`.
-- Sitemap and robots files are included in `frontend/public/`.
-
-### 10. Accessibility
-
-- Semantic layout elements are used across pages.
-- Buttons and links are keyboard-accessible.
-- Form labels are present on settings, task, project, team, and meeting forms.
-- Modal can be closed with Escape.
-
-### 11. Error Handling
-
-- Error boundary is implemented in [ErrorBoundary.jsx](/D:/PROJECTS/IdeaForge/frontend/src/components/common/ErrorBoundary.jsx).
-- Backend uses centralized error middleware.
-- Frontend views show local error states for failed API calls.
-
-### 12. Custom Hooks
-
-- [useAuth.js](/D:/PROJECTS/IdeaForge/frontend/src/hooks/useAuth.js)
-- [useDebounce.js](/D:/PROJECTS/IdeaForge/frontend/src/hooks/useDebounce.js)
-- [useTheme.js](/D:/PROJECTS/IdeaForge/frontend/src/hooks/useTheme.js)
-- [useSessionStorage.js](/D:/PROJECTS/IdeaForge/frontend/src/hooks/useSessionStorage.js)
-- [usePageTracking.js](/D:/PROJECTS/IdeaForge/frontend/src/hooks/usePageTracking.js)
-
-### 13. Notifications System
-
-- Notification bell fetches backend notifications and unread count.
-- Mark single notification as read and mark all as read are implemented.
-- Toast feedback is implemented through Redux UI state and [ToastHost.jsx](/D:/PROJECTS/IdeaForge/frontend/src/components/common/ToastHost.jsx).
-
-### 14. Real-Time Ready Structure
-
-- App-wide data refresh events are implemented in [appEvents.js](/D:/PROJECTS/IdeaForge/frontend/src/appEvents.js).
-- Notifications currently poll every 30 seconds.
-- The structure is ready for Socket.io replacement in the next phase.
-
-### 15. File Upload Feature
-
-- Profile settings include avatar file preview UI.
-- Validation supports JPG, PNG, GIF and max 800K preview size.
-- Google/email avatar remains the account source of truth.
-
-### 16. Analytics and Tracking
-
-- Page tracking is implemented in [usePageTracking.js](/D:/PROJECTS/IdeaForge/frontend/src/hooks/usePageTracking.js).
-- Temporary page view history is stored in sessionStorage.
-- Google Analytics can be connected by loading `gtag` and setting `VITE_GA_MEASUREMENT_ID`.
-
-### 17. Storage
-
-- localStorage: user profile cache, theme preference, notification preferences.
-- sessionStorage: temporary search state and page tracking history.
-- Logout clears user cache and session storage.
-- Sensitive JWT is kept in an HTTP-only cookie, not manually stored in localStorage.
-
-### 18. Code Quality
-
-- ESLint script is configured in frontend `package.json`.
-- Components are modular and grouped by feature area.
-- Naming has been cleaned up, including `RecentEvaluations` renamed to `RecentProjects`.
-
-### 19. Documentation
-
-- This README includes setup, features, folder structure, checklist mapping, deployment, and environment variables.
+- Render
+- MongoDB Compass
+- Postman
+- GitHub
+- Google Cloud Console
+- Figma
 
 ## Folder Structure
 
@@ -184,13 +90,50 @@ https://github.com/codinggita/CGxSU_Semester_1/blob/main/assignments/04.sem2_ful
 IdeaForge/
   backend/
     config/
+      db.js
     controllers/
+      calendarController.js
+      dashboardController.js
+      gmailController.js
+      googleAuthController.js
+      meetingController.js
+      notificationController.js
+      projectController.js
+      reportController.js
+      searchController.js
+      taskController.js
+      teamController.js
+      userController.js
     middleware/
+      authMiddleware.js
+      errorMiddleware.js
     models/
+      meetingModel.js
+      notificationModel.js
+      projectModel.js
+      taskModel.js
+      teamModel.js
+      userModel.js
     routes/
+      calendarRoutes.js
+      dashboardRoutes.js
+      gmailRoutes.js
+      googleAuthRoutes.js
+      meetingRoutes.js
+      notificationRoutes.js
+      projectRoutes.js
+      reportRoutes.js
+      searchRoutes.js
+      taskRoutes.js
+      teamRoutes.js
+      userRoutes.js
+    utils/
+      generateToken.js
     server.js
   frontend/
     public/
+      robots.txt
+      sitemap.xml
     src/
       components/
       context/
@@ -198,17 +141,97 @@ IdeaForge/
       pages/
       services/
       store/
-      appEvents.js
-      calendarEvents.js
+      utils/
+      App.jsx
+      main.jsx
 ```
 
+## Project Screenshots
+
+Add screenshots before final submission if required by evaluator:
+
+- Landing Page
+- Login / Register Page
+- Dashboard
+- Projects Page
+- Tasks Page
+- Calendar / Meetings Page
+- Teams Page
+- Reports Page
+- Settings Page
+- Postman Documentation Page
+
+Suggested location:
+
+```txt
+frontend/public/screenshots/
+```
+
+Then reference them in this section using Markdown image syntax.
+
+## API Overview
+
+Base API URL:
+
+```txt
+https://crmideaforge.onrender.com/api
+```
+
+Main API modules:
+
+- `/api` - health check
+- `/api/users` - register, login, logout, profile
+- `/api/auth/google` - Google OAuth login, callback, and debug
+- `/api/projects` - project CRUD
+- `/api/tasks` - task CRUD
+- `/api/teams` - team and member management
+- `/api/meetings` - meeting CRUD
+- `/api/calendar` - Google Calendar data
+- `/api/gmail` - Gmail recent emails
+- `/api/dashboard` - dashboard stats
+- `/api/reports` - report analytics
+- `/api/notifications` - notification inbox
+- `/api/search` - global search
+
+Full API documentation:
+
+```txt
+https://documenter.getpostman.com/view/50839203/2sBXqKoKkY
+```
+
+## SEO Implementation
+
+- Dynamic route-level titles and meta descriptions.
+- Open Graph metadata for better sharing previews.
+- Twitter card metadata.
+- Schema.org `SoftwareApplication` structured data.
+- `robots.txt` included in frontend public assets.
+- `sitemap.xml` included in frontend public assets.
+- Production canonical URL configured for the deployed Render app.
+
+## Official Checklist Coverage
+
+The project implements the important features expected in the Coding Gita full-stack checklist:
+
+- React project setup with clean component structure.
+- Routing with public and protected pages.
+- Authentication and route protection.
+- API integration using Axios.
+- Reusable components, forms, modals, cards, sidebar, and dashboard widgets.
+- Form validation with Formik and Yup.
+- State management with Redux Toolkit and Context.
+- MongoDB models and relationships.
+- Express REST APIs with controllers, routes, middleware, and error handling.
+- CRUD operations for projects, tasks, teams, and meetings.
+- Local storage/session storage usage for non-sensitive UI state.
+- HTTP-only cookie usage for JWT security.
+- Google OAuth and Google API integrations.
+- Responsive UI.
+- SEO implementation.
+- Deployment-ready production build.
+- Postman documentation.
+
 ## Local Setup
-
-### Prerequisites
-
-- Node.js 18+
-- MongoDB Atlas or local MongoDB
-- Google Cloud OAuth credentials if testing Google login, Gmail, and Calendar
 
 ### Backend
 
@@ -242,75 +265,66 @@ cp .env.example .env
 npm run dev
 ```
 
-Frontend environment:
+Frontend environment variables:
 
 ```env
 VITE_API_BASE_URL=/api
 VITE_GA_MEASUREMENT_ID=
+VITE_PUBLIC_APP_URL=http://localhost:5173
 ```
 
-Visit:
+Local frontend URL:
 
 ```txt
 http://localhost:5173
 ```
 
-## Production Deployment on Render
+## Deployment
 
-1. Push the repo to GitHub.
-2. Create a MongoDB Atlas database.
-3. In Render, create a new Blueprint or Web Service from this repository.
-4. Use the included [render.yaml](/D:/PROJECTS/IdeaForge/render.yaml), or manually set:
+The project is deployed on Render as a MERN monorepo where the Express backend serves the Vite frontend production build.
 
-```bash
-Build Command: cd backend && npm install && cd ../frontend && npm install && npm run build
-Start Command: cd backend && npm start
+Production URLs:
+
+```txt
+Frontend: https://crmideaforge.onrender.com
+Backend API: https://crmideaforge.onrender.com/api
 ```
 
-5. Add these Render environment variables:
+Required production environment variables:
 
 ```env
 NODE_ENV=production
 PORT=10000
-MONGO_URI=your_mongodb_atlas_uri
+MONGO_URI=your_mongodb_atlas_connection_string
 JWT_SECRET=your_long_random_secret
-FRONTEND_URL=https://your-render-app.onrender.com
-CORS_ORIGIN=https://your-render-app.onrender.com
+FRONTEND_URL=https://crmideaforge.onrender.com
+CORS_ORIGIN=https://crmideaforge.onrender.com
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_CALLBACK_URL=https://your-render-app.onrender.com/api/auth/google/callback
+GOOGLE_CALLBACK_URL=https://crmideaforge.onrender.com/api/auth/google/callback
+DNS_SERVERS=1.1.1.1,8.8.8.8
 ```
 
-6. In Google Cloud Console, add the same production callback URL to Authorized redirect URIs.
+Google Cloud OAuth redirect URI:
 
-## API Overview
-
-- `/api/users` - register, login, logout, profile
-- `/api/auth/google` - Google OAuth login and callback
-- `/api/projects` - project CRUD
-- `/api/tasks` - task CRUD
-- `/api/teams` - team CRUD and member role management
-- `/api/meetings` - local meeting CRUD
-- `/api/calendar` - Google Calendar events
-- `/api/gmail` - recent Gmail messages
-- `/api/reports` - analytics metrics
-- `/api/notifications` - notification inbox
-- `/api/search` - global search
+```txt
+https://crmideaforge.onrender.com/api/auth/google/callback
+```
 
 ## Validation
 
-Latest local validation:
+Frontend production build:
 
 ```bash
 cd frontend
 npm run build
 ```
 
-Build result: passed.
+Latest build status: passed.
 
 ## AI Assistance Disclosure
 
-This project was initially developed with Antigravity assistance and later refined with Codex assistance for final-phase implementation, checklist mapping, SEO, deployment readiness, README writing, and code quality improvements. All generated changes were reviewed and integrated into the project codebase.
+This project was initially developed with Antigravity assistance and later refined with Codex assistance for final-phase implementation, checklist mapping, deployment fixes, SEO, README updates, and Postman documentation support.
 
 ## Author
 

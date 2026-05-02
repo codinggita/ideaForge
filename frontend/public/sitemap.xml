@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://ideaforge-saas.vercel.app/</loc></url>
-  <url><loc>https://ideaforge-saas.vercel.app/login</loc></url>
-  <url><loc>https://ideaforge-saas.vercel.app/dashboard</loc></url>
-  <url><loc>https://ideaforge-saas.vercel.app/projects</loc></url>
-  <url><loc>https://ideaforge-saas.vercel.app/tasks</loc></url>
-  <url><loc>https://ideaforge-saas.vercel.app/calendar</loc></url>
-  <url><loc>https://ideaforge-saas.vercel.app/teams</loc></url>
-  <url><loc>https://ideaforge-saas.vercel.app/reports</loc></url>
-  <url><loc>https://ideaforge-saas.vercel.app/settings</loc></url>
+  <url><loc>https://crmideaforge.onrender.com/</loc></url>
+  <url><loc>https://crmideaforge.onrender.com/login</loc></url>
+  <url><loc>https://crmideaforge.onrender.com/dashboard</loc></url>
+  <url><loc>https://crmideaforge.onrender.com/projects</loc></url>
+  <url><loc>https://crmideaforge.onrender.com/tasks</loc></url>
+  <url><loc>https://crmideaforge.onrender.com/calendar</loc></url>
+  <url><loc>https://crmideaforge.onrender.com/teams</loc></url>
+  <url><loc>https://crmideaforge.onrender.com/reports</loc></url>
+  <url><loc>https://crmideaforge.onrender.com/settings</loc></url>
 </urlset>

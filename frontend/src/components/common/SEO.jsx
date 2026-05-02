@@ -3,13 +3,14 @@ import { Helmet } from 'react-helmet-async';
 
 const defaultDescription =
   'IdeaForge is a MERN SaaS workspace for projects, tasks, teams, meetings, reports, search, notifications, and Google productivity integrations.';
+const siteUrl = import.meta.env.VITE_PUBLIC_APP_URL || 'https://crmideaforge.onrender.com';
 
 export default function SEO({
   title = 'IdeaForge | MERN SaaS Project Workspace',
   description = defaultDescription,
   path = '/',
 }) {
-  const url = `https://ideaforge-saas.vercel.app${path}`;
+  const url = `${siteUrl}${path}`;
 
   return (
     <Helmet>

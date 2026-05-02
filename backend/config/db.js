@@ -1,4 +1,7 @@
 import mongoose from 'mongoose';
+import dns from 'dns';
+
+dns.setServers((process.env.DNS_SERVERS || '1.1.1.1,8.8.8.8').split(','));
 
 const connectDB = async () => {
   try {

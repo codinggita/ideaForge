@@ -9,6 +9,8 @@ const loginFeatures = [
   { label: "Team Roles", value: "Scoped" },
 ];
 
+const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || "/api").replace(/\/$/, "");
+
 export default function LoginPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -32,7 +34,7 @@ export default function LoginPage() {
 
   const handleGoogleLogin = () => {
     setAuthMode("google");
-    window.location.href = "http://localhost:5000/api/auth/google";
+    window.location.href = `${apiBaseUrl}/auth/google`;
   };
 
   const handleEmailSubmit = async (payload) => {

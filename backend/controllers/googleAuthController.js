@@ -12,6 +12,10 @@ const getOAuth2Client = () => {
 };
 
 const getFrontendUrl = () => process.env.FRONTEND_URL || 'http://localhost:5173';
+const getGoogleCallbackUrl = () =>
+  process.env.GOOGLE_CALLBACK_URL || 'http://localhost:5000/api/auth/google/callback';
+const maskClientId = (clientId = '') =>
+  clientId ? `${clientId.slice(0, 10)}...${clientId.slice(-12)}` : 'missing';
 
 // @desc    Redirect to Google OAuth consent screen
 // @route   GET /api/auth/google
@@ -33,6 +37,17 @@ const googleAuth = asyncHandler(async (req, res) => {
   });
 
   res.redirect(authorizationUrl);
+});
+
+// @desc    Show safe Google OAuth configuration for deployment debugging
+// @route   GET /api/auth/google/debug
+// @access  Public
+const googleDebug = asyncHandler(async (req, res) => {
+  res.json({
+    googleCallbackUrl: getGoogleCallbackUrl(),
+    frontendUrl: getFrontendUrl(),
+    googleClientId: maskClientId(process.env.GOOGLE_CLIENT_ID),
+  });
 });
 
 // @desc    Handle Google OAuth callback
@@ -94,4 +109,4 @@ const googleCallback = asyncHandler(async (req, res) => {
   }
 });
 
-export { googleAuth, googleCallback };
+export { googleAuth, googleCallback, googleDebug };
