@@ -148,26 +148,11 @@ IdeaForge/
 
 ## Project Screenshots
 
-Add screenshots before final submission if required by evaluator:
+### Landing Page
 
-- Landing Page
-- Login / Register Page
-- Dashboard
-- Projects Page
-- Tasks Page
-- Calendar / Meetings Page
-- Teams Page
-- Reports Page
-- Settings Page
-- Postman Documentation Page
+The landing page presents IdeaForge as an AI-first MERN SaaS workspace for startup operations, project planning, team workflows, pricing, and execution.
 
-Suggested location:
-
-```txt
-frontend/public/screenshots/
-```
-
-Then reference them in this section using Markdown image syntax.
+![IdeaForge Landing Page](frontend/public/screenshots/landing-page.png)
 
 ## API Overview
 

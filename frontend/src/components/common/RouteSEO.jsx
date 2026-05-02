@@ -10,34 +10,42 @@ const seoByRoute = {
   '/login': {
     title: 'Login | IdeaForge',
     description: 'Sign in to IdeaForge using email/password or Google OAuth.',
+    noIndex: true,
   },
   '/dashboard': {
     title: 'Dashboard | IdeaForge',
     description: 'View live project stats, tasks, meetings, emails, notifications, and AI-style daily briefing.',
+    noIndex: true,
   },
   '/projects': {
     title: 'Projects | IdeaForge',
     description: 'Manage personal and team projects through planning, active, and completed stages.',
+    noIndex: true,
   },
   '/tasks': {
     title: 'Tasks & Ideas | IdeaForge',
     description: 'Capture ideas, assign tasks, and track execution with optimistic updates.',
+    noIndex: true,
   },
   '/calendar': {
     title: 'Calendar & Meetings | IdeaForge',
     description: 'Review Google Calendar events and locally scheduled meetings from one workspace.',
+    noIndex: true,
   },
   '/teams': {
     title: 'Teams | IdeaForge',
     description: 'Create teams, invite members, assign roles, and collaborate securely.',
+    noIndex: true,
   },
   '/reports': {
     title: 'Reports | IdeaForge',
     description: 'Analyze project and task performance with custom canvas charts and workspace metrics.',
+    noIndex: true,
   },
   '/settings': {
     title: 'Settings | IdeaForge',
     description: 'Manage profile, security, notifications, billing readiness, and preferences.',
+    noIndex: true,
   },
 };
 
